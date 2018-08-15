@@ -32,7 +32,8 @@ export default class MainController {
         const url = reader.result;
         const image = new Image();
         image.src = url;
-        resolve(image);
+        // Firefox sometimes doesn't render immediately
+        setTimeout(() => resolve(image), 1);
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
