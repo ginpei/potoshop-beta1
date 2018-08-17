@@ -1,3 +1,5 @@
+// @ts-check
+
 export default class MainController {
   constructor () {
     this.originalWidth = 0;
@@ -30,8 +32,8 @@ export default class MainController {
       const reader = new FileReader();
       reader.onload = () => {
         const url = reader.result;
-        const image = new Image();
-        image.src = url;
+        const image = document.createElement('img');
+        image.src = String(url);
         // Firefox sometimes doesn't render immediately
         setTimeout(() => resolve(image), 1);
       };
