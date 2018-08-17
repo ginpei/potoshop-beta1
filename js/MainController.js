@@ -34,7 +34,8 @@ export default class MainController {
         const url = reader.result;
         const image = document.createElement('img');
         image.src = String(url);
-        // Firefox sometimes doesn't render immediately
+
+        // Firefox sometimes doesn't render it immediately
         setTimeout(() => resolve(image), 1);
       };
       reader.onerror = reject;
