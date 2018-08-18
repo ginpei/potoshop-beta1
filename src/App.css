@@ -1,0 +1,57 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  font-size: 12px;
+}
+
+.App {
+  --fg-color: #333;
+  --app-space: 1rem;
+  --app-header-height: 1.5rem;
+  --app-left-width: 5rem;
+  --app-right-width: 15rem;
+  --app-footer-height: 1.5rem;
+
+  color: var(--fg-color);
+  display: grid;
+  grid-template:
+    "header header header" var(--app-header-height)
+    "left   main   right " calc(100% - var(--app-header-height) - var(--app-footer-height))
+    "footer footer footer" var(--app-footer-height)
+    / var(--app-left-width) calc(100% - var(--app-left-width) - var(--app-right-width)) var(--app-right-width);
+  height: 100%;
+  width: 100%;
+}
+
+  .App > * {
+    overflow: auto;
+  }
+
+  .App-Header {
+    grid-area: header;
+  }
+
+  .App-Main {
+    grid-area: main;
+  }
+
+  .App-Left {
+    border-right: 1px solid var(--fg-color);
+    grid-area: left;
+  }
+
+  .App-Right {
+    border-left: 1px solid var(--fg-color);
+    grid-area: right;
+  }
+
+  .App-Footer {
+    border-top: 1px solid var(--fg-color);
+    grid-area: footer;
+    overflow: hidden; /* ??? */
+  }

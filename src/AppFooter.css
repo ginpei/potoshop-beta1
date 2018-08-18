@@ -1,0 +1,6 @@
+.AppFooter {
+  background-color: lightgray;
+  height: var(--app-footer-height);
+  line-height: var(--app-footer-height);
+  padding: 0 var(--app-space);
+}
