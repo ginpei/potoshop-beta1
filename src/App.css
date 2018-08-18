@@ -9,6 +9,28 @@ html {
   font-size: 12px;
 }
 
+body {
+  min-height: 400px;
+  min-width: 800px;
+}
+
+@media only screen and (max-width: 800px),
+       only screen and (max-height: 400px) {
+  body::after {
+    background-color: #000c;
+    color: lightgray;
+    content: "Your screen is too small to use. Required at least 800x400.";
+    display: block;
+    height: 100%;
+    left: 0;
+    line-height: 100vh;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+  }
+}
+
 .App {
   --fg-color: #333;
   --app-space: 1rem;
