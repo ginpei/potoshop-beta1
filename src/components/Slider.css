@@ -1,0 +1,13 @@
+.Slider {
+  display: inline-grid;
+  grid-gap: 5%;
+  grid-template:
+    "range number" auto
+    / 65% 30%;
+}
+  .Slider-range {
+    grid-area: range;
+  }
+  .Slider-number {
+    grid-area: number;
+  }

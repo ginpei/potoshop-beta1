@@ -2,6 +2,7 @@ import * as React from 'react';
 import './App.css';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
+import ManagementPanel from './ManagementPanel';
 import Prototype from './Prototype';
 
 class App extends React.Component {
@@ -18,7 +19,7 @@ class App extends React.Component {
           <div>Tools</div>
         </div>
         <div className="App-Right">
-          <div>Layers</div>
+          <ManagementPanel />
         </div>
         <div className="App-Footer">
           <AppFooter />
