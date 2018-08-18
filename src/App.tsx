@@ -98,7 +98,7 @@ class App extends React.Component<{}, IAppState> {
       this.updateCanvas();
     }
   }
-  
+
   public componentWillUnmount () {
     document.removeEventListener('paste', this.fOnPaste);
   }
@@ -108,7 +108,7 @@ class App extends React.Component<{}, IAppState> {
     if (!item || !item.type.startsWith('image')) {
       return;
     }
-    
+
     const file = item.getAsFile();
     if (!file) { throw new Error('Failed to get file'); }
     const image = await this.readImage(file);
@@ -151,7 +151,7 @@ class App extends React.Component<{}, IAppState> {
 
   protected updateCanvas() {
     if (!this.elCanvas) { return; }
-    
+
     const {
       bordered,
       image,
@@ -166,7 +166,7 @@ class App extends React.Component<{}, IAppState> {
     this.elCanvas.width = width;
     this.elCanvas.height = height;
     ctx.drawImage(image, 0, 0, width, height);
-    
+
     if (bordered) {
       ctx.strokeStyle = 'gray';
       ctx.rect(0, 0, width, height);
@@ -182,7 +182,7 @@ class App extends React.Component<{}, IAppState> {
       width: Math.floor(this.state.originalWidth * scale),
     });
   }
-  
+
   protected onBorderClick () {
     this.setState({
       bordered: this.elBorder!.checked,
