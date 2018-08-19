@@ -4,15 +4,7 @@ import Slider, { ISliderEventData } from './components/Slider';
 import './ImageStatePanel.css';
 import './ManagementPanel.css';
 import { IImageState } from './store/imageInfo';
-
-function autoMapStateToProps (state: IImageState, names: string[]) {
-  return names.reduce((obj, name) => {
-    obj[name] = state[name];
-    return obj;
-  }, {});
-}
-
-// ----
+import { autoMapStateToProps } from './store/util';
 
 type IImageStatePanelProps = any;
 // interface IImageStatePanelProps {

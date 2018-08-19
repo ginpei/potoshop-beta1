@@ -11,3 +11,10 @@ export function autoActions (names: string[]) {
     return obj;
   }, {});
 }
+
+export function autoMapStateToProps (state: any, names: string[]) {
+  return names.reduce((obj, name) => {
+    obj[name] = state[name];
+    return obj;
+  }, {});
+}
