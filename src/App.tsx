@@ -6,7 +6,7 @@ import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
 import Prototype from './Prototype';
 import { readImage, setImage } from './services/image';
-import imageInfo from './store/imageInfo';
+import imageInfo from './store/imageState';
 
 class App extends React.Component {
   constructor (props: any) {

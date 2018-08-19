@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Slider, { ISliderEventData } from './components/Slider';
 import './ImageStatePanel.css';
 import './ManagementPanel.css';
-import { IImageState } from './store/imageInfo';
+import { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
 type IImageStatePanelProps = any;

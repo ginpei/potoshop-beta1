@@ -1,4 +1,4 @@
-import imageState from '../store/imageInfo';
+import imageState from '../store/imageState';
 
 export function readImage (file: File): Promise<HTMLImageElement | null> {
   if (!file || !file.type.startsWith('image/')) {
