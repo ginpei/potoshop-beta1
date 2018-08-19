@@ -1,21 +1,34 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
-import { IImageState } from './store/imageState';
+import { readImage } from './services/image';
+import imageState, { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasProps = IImageState;
 
-class PotoCanvas extends React.Component {
+class PotoCanvas extends React.Component<IPotoCanvasProps> {
   private elCanvas: HTMLCanvasElement | null;
 
-  // constructor (props: any) {
-  //   super(props);
-  // }
+  constructor (props: any) {
+    super(props);
+  }
 
   public render() {
+    const fileOpener = this.props.image ? undefined : (
+      <div className="PotoCanvas">
+        <p>
+          <input type="file"
+            onChange={this.onFileChange}
+            />
+        </p>
+        <p>Or hit <code>Ctrl+V</code> to paste image.</p>
+      </div>
+    );
+
     return (
       <div className="PotoCanvas">
+        {fileOpener}
         <canvas className="PotoCanvas-canvas" ref={el => this.elCanvas = el} />
       </div>
     );
@@ -24,6 +37,19 @@ class PotoCanvas extends React.Component {
   public componentWillReceiveProps (nextProps: IPotoCanvasProps) {
     if (nextProps.image) {
       this.updateCanvas(nextProps);
+    }
+  }
+
+  protected async onFileChange (event: React.ChangeEvent<HTMLInputElement>) {
+    const el = event.currentTarget;
+    if (!el.files || el.files.length < 1) {
+      return;
+    }
+
+    const file = el.files[0];
+    const image = await readImage(file);
+    if (image) {
+      imageState.dispatch({ type: 'SET_IMAGE', value: image });
     }
   }
 
