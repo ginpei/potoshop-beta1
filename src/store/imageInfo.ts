@@ -1,7 +1,5 @@
 import { createStore } from 'redux';
-import { autoActions } from './util';
-
-type IAction = any;
+import { autoActions, buildReducer } from './util';
 
 export interface IImageState {
   bordered: boolean;
@@ -25,24 +23,14 @@ const initialImageState: IImageState = {
 
 const actions = autoActions([
   'bordered',
+  'height',
+  'originalHeight',
+  'originalWidth',
   'scale',
+  'type',
+  'width',
 ]);
-
-function reducer (state: IImageState = initialImageState, action: IAction) {
-  const { type } = action;
-  if (actions[type]) {
-    const rv = Object.assign({}, state);
-    actions[type](rv, action);
-    return rv;
-  }
-  else if (type.startsWith('@@redux/')) {
-    return state;
-  }
-  else {
-    throw new Error(`Unknown action type: ${type}`);
-  }
-};
-
+const reducer = buildReducer(initialImageState, actions);
 const store = createStore(reducer);
 
 export default store;
