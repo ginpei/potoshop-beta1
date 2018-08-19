@@ -81,10 +81,16 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
   }
 
   public componentWillReceiveProps (nextProps: IImageStatePanelProps) {
+    const nextState: any = {};
     if (typeof nextProps.bordered === 'boolean') {
-      this.setState({
-        bordered: nextProps.bordered,
-      });
+      nextState.bordered = nextProps.bordered;
+    }
+    if (typeof nextProps.scale === 'number') {
+      nextState.scale = nextProps.scale;
+    }
+
+    if (Object.keys(nextState).length > 0) {
+      this.setState(nextState);
     }
   }
 
@@ -94,9 +100,7 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
   }
 
   protected onSlider1Change (_: any, data: ISliderEventData) {
-    this.setState({
-      scale: data.value,
-    });
+    this.props.setScale(data.value);
   }
 }
 
@@ -109,8 +113,11 @@ function mapStateToProps (state: IImageState) {
 
 function mapDispatchToProps (dispatch: any) {
   return {
-    setBordered: (bordered: boolean) => {
-      dispatch({ type: 'SET_BORDERED', value: bordered });
+    setBordered: (value: boolean) => {
+      dispatch({ type: 'SET_BORDERED', value });
+    },
+    setScale: (value: number) => {
+      dispatch({ type: 'SET_SCALE', value });
     },
   };
 }
