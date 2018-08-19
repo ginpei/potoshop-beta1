@@ -43,7 +43,7 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
       <div className="ImageStatePanel">
         <div className="ManagementPanel-info">
           <ul>
-            <li>Type: {this.state.type}</li>
+            <li>Type: {this.props.type}</li>
             <li>
               Original size:
               {this.state.originalWidth}
@@ -108,6 +108,7 @@ function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
     'bordered',
     'scale',
+    'type',
   ]);
 };
 

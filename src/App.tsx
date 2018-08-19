@@ -53,6 +53,7 @@ class App extends React.Component {
 
     const file = item.getAsFile();
     if (!file) { throw new Error('Failed to get file'); }
+    imageInfo.dispatch({ type: 'SET_TYPE', value: file.type });
 
     // TODO
     console.log(file);
