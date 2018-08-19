@@ -4,9 +4,9 @@ import './App.css';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
-import Prototype from './Prototype';
-import { readImage, setImage } from './services/image';
-import imageInfo from './store/imageState';
+import PotoCanvas from './PotoCanvas';
+import { readImage } from './services/image';
+import imageState from './store/imageState';
 
 class App extends React.Component {
   constructor (props: any) {
@@ -16,13 +16,13 @@ class App extends React.Component {
 
   public render() {
     return (
-      <Provider store={imageInfo}>
+      <Provider store={imageState}>
         <div className="App">
           <div className="App-Header">
             <AppHeader />
           </div>
           <div className="App-Main">
-            <Prototype />
+            <PotoCanvas />
           </div>
           <div className="App-Left">
             <div>Tools</div>
@@ -49,7 +49,7 @@ class App extends React.Component {
   protected async onPaste (event: ClipboardEvent) {
     const item = event.clipboardData.items[0];
     if (item) {
-      imageInfo.dispatch({ type: 'SET_TYPE', value: item.type });
+      imageState.dispatch({ type: 'SET_TYPE', value: item.type });
     }
     if (!item || !item.type.startsWith('image')) {
       return;
@@ -60,7 +60,7 @@ class App extends React.Component {
 
     const image = await readImage(file);
     if (image) {
-      setImage(image);
+      imageState.dispatch({ type: 'SET_IMAGE', value: image });
     }
   }
 }

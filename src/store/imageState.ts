@@ -6,6 +6,7 @@ type IAction = any;
 export interface IImageState {
   bordered: boolean;
   height: number;
+  image?: HTMLImageElement,
   originalHeight: number;
   originalWidth: number;
   scale: number;
@@ -16,6 +17,7 @@ export interface IImageState {
 const initialImageState: IImageState = {
   bordered: false,
   height: 0,
+  image: undefined,
   originalHeight: 0,
   originalWidth: 0,
   scale: 1,
@@ -27,8 +29,12 @@ const actions = Object.assign(autoActions([
   'bordered',
   'type',
 ]), {
-  SET_ORIGINAL_SIZE: (state: IImageState, action: IAction) => {
-    const { height, width } = action.value;
+  SET_IMAGE: (state: IImageState, action: IAction) => {
+    const image: HTMLImageElement = action.value;
+    const width = image.naturalWidth;
+    const height = image.naturalHeight;
+
+    state.image = image;
     state.originalWidth = width;
     state.originalHeight = height;
     state.width = width;
