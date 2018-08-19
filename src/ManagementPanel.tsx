@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Slider, { ISliderEventData } from './components/Slider';
+import ImageStatePanel from './ImageStatePanel';
 import './ManagementPanel.css';
+import store from './store/imageInfo';
 
 interface IManagementPanelState {
   bordered: boolean;
@@ -34,6 +36,7 @@ class ManagementPanel extends React.Component<{}, IManagementPanelState> {
   public render() {
     return (
       <div className="ManagementPanel">
+        <ImageStatePanel store={store} />
         <div className="ManagementPanel-info">
           <ul>
             <li>Type: {this.state.type}</li>
