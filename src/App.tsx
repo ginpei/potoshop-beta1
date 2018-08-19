@@ -5,12 +5,17 @@ import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
 import Prototype from './Prototype';
-import store from './store/imageInfo';
+import imageInfo from './store/imageInfo';
 
 class App extends React.Component {
+  constructor (props: any) {
+    super(props);
+    this.onPaste = this.onPaste.bind(this);
+  }
+
   public render() {
     return (
-      <Provider store={store}>
+      <Provider store={imageInfo}>
         <div className="App">
           <div className="App-Header">
             <AppHeader />
@@ -30,6 +35,27 @@ class App extends React.Component {
         </div>
       </Provider>
     );
+  }
+
+  public componentDidMount () {
+    document.addEventListener('paste', this.onPaste);
+  }
+
+  public componentWillUnmount () {
+    document.removeEventListener('paste', this.onPaste);
+  }
+
+  protected async onPaste (event: ClipboardEvent) {
+    const item = event.clipboardData.items[0];
+    if (!item || !item.type.startsWith('image')) {
+      return;
+    }
+
+    const file = item.getAsFile();
+    if (!file) { throw new Error('Failed to get file'); }
+
+    // TODO
+    console.log(file);
   }
 }
 
