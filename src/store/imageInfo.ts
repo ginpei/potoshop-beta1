@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+import { autoActions } from './util';
 
 type IAction = any;
 
@@ -22,15 +23,10 @@ const initialImageState: IImageState = {
   width: 0,
 };
 
-const actions = {
-  SET_BORDERED: (state: IImageState, action: IAction) => {
-    state.bordered = action.value;
-  },
-
-  SET_SCALE: (state: IImageState, action: IAction) => {
-    state.scale = action.value;
-  },
-};
+const actions = autoActions([
+  'bordered',
+  'scale',
+]);
 
 function reducer (state: IImageState = initialImageState, action: IAction) {
   const { type } = action;
