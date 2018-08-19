@@ -46,15 +46,15 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
             <li>Type: {this.props.type}</li>
             <li>
               Original size:
-              {this.state.originalWidth}
+              {this.props.originalWidth}
               x
-              {this.state.originalHeight}
+              {this.props.originalHeight}
             </li>
             <li>
               Size:
-              {this.state.width}
+              {this.props.width}
               x
-              {this.state.height}
+              {this.props.height}
             </li>
             <li>
               <label>
@@ -63,7 +63,6 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
                   onClick={this.onBorderedClick}
                   />
                 Border
-                ({String(this.state.bordered)})
               </label>
             </li>
           </ul>
@@ -107,8 +106,12 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
 function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
     'bordered',
+    'height',
+    'originalHeight',
+    'originalWidth',
     'scale',
     'type',
+    'width',
   ]);
 };
 

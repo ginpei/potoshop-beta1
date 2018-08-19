@@ -5,6 +5,7 @@ import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
 import Prototype from './Prototype';
+import { readImage, setImage } from './services/image';
 import imageInfo from './store/imageInfo';
 
 class App extends React.Component {
@@ -47,16 +48,20 @@ class App extends React.Component {
 
   protected async onPaste (event: ClipboardEvent) {
     const item = event.clipboardData.items[0];
+    if (item) {
+      imageInfo.dispatch({ type: 'SET_TYPE', value: item.type });
+    }
     if (!item || !item.type.startsWith('image')) {
       return;
     }
 
     const file = item.getAsFile();
     if (!file) { throw new Error('Failed to get file'); }
-    imageInfo.dispatch({ type: 'SET_TYPE', value: file.type });
 
-    // TODO
-    console.log(file);
+    const image = await readImage(file);
+    if (image) {
+      setImage(image);
+    }
   }
 }
 
