@@ -5,6 +5,8 @@ type IAction = any;
 
 export interface IImageState {
   bordered: boolean;
+  flipH: boolean;
+  flipV: boolean;
   height: number;
   image?: HTMLImageElement,
   originalHeight: number;
@@ -17,6 +19,8 @@ export interface IImageState {
 
 const initialImageState: IImageState = {
   bordered: false,
+  flipH: false,
+  flipV: false,
   height: 0,
   image: undefined,
   originalHeight: 0,
@@ -29,6 +33,8 @@ const initialImageState: IImageState = {
 
 const actions = Object.assign(autoActions([
   'bordered',
+  'flipH',
+  'flipV',
   'rotation',
   'type',
 ]), {
@@ -44,6 +50,8 @@ const actions = Object.assign(autoActions([
     state.height = height;
     state.rotation = 0;
     state.scale = 1;
+    state.flipH = false;
+    state.flipV = false;
     console.log(state, width, height);
   },
 

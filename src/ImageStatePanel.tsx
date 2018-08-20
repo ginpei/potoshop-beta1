@@ -18,6 +18,8 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
     super(props);
     this.state = {
       bordered: 'bordered' in props ? props.bordered : true,
+      flipH: false,
+      flipV: false,
       height: 0,
       originalHeight: 0,
       originalWidth: 0,
@@ -30,6 +32,8 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
     this.onSlider1Change = this.onSlider1Change.bind(this);
     this.onRotationChange = this.onRotationChange.bind(this);
     this.onBorderedClick = this.onBorderedClick.bind(this);
+    this.onFlipHClick = this.onFlipHClick.bind(this);
+    this.onFlipVClick = this.onFlipVClick.bind(this);
   }
 
   public render () {
@@ -57,6 +61,25 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
                   onClick={this.onBorderedClick}
                   />
                 Border
+              </label>
+            </li>
+            <li>
+              Flip:
+              <br/>
+              <label>
+                <input type="checkbox"
+                  checked={this.state.flipH}
+                  onClick={this.onFlipHClick}
+                  />
+                Horizontally
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox"
+                  checked={this.state.flipV}
+                  onClick={this.onFlipVClick}
+                  />
+                Vertically
               </label>
             </li>
           </ul>
@@ -90,6 +113,12 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
     if (typeof nextProps.bordered === 'boolean') {
       nextState.bordered = nextProps.bordered;
     }
+    if (typeof nextProps.flipH === 'boolean') {
+      nextState.flipH = nextProps.flipH;
+    }
+    if (typeof nextProps.flipV === 'boolean') {
+      nextState.flipV = nextProps.flipV;
+    }
     if (typeof nextProps.scale === 'number') {
       nextState.scale = nextProps.scale;
     }
@@ -107,6 +136,16 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
     this.props.setBordered(el.checked);
   }
 
+  protected onFlipHClick (event: React.MouseEvent<HTMLInputElement>) {
+    const el = event.currentTarget;
+    this.props.setFlipH(el.checked);
+  }
+
+  protected onFlipVClick (event: React.MouseEvent<HTMLInputElement>) {
+    const el = event.currentTarget;
+    this.props.setFlipV(el.checked);
+  }
+
   protected onSlider1Change (_: any, data: ISliderEventData) {
     this.props.setScale(data.value);
   }
@@ -119,6 +158,8 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
 function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
     'bordered',
+    'flipH',
+    'flipV',
     'rotation',
     'height',
     'originalHeight',
@@ -133,6 +174,15 @@ function mapDispatchToProps (dispatch: any) {
   return {
     setBordered: (value: boolean) => {
       dispatch({ type: 'SET_BORDERED', value });
+    },
+    setFlipH: (value: number) => {
+      dispatch({ type: 'SET_FLIP_H', value });
+    },
+    setFlipV: (value: number) => {
+      dispatch({ type: 'SET_FLIP_V', value });
+    },
+    setFlipW: (value: number) => {
+      dispatch({ type: 'SET_FLIP_W', value });
     },
     setRotation: (value: number) => {
       dispatch({ type: 'SET_ROTATION', value });
