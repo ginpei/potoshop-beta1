@@ -62,18 +62,28 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
 
     const {
       bordered,
-      image,
-      width,
       height,
+      image,
+      rotation,
+      width,
     } = props;
     if (!image) { return; }
+    const x0 = -width / 2;
+    const y0 = -height / 2;
+    const degree = rotation * 2 * Math.PI;
 
     const ctx = this.elCanvas!.getContext('2d');
     if (!ctx) { throw new Error('Failed to get canvas context') }
 
     this.elCanvas.width = width;
     this.elCanvas.height = height;
-    ctx.drawImage(image, 0, 0, width, height);
+    ctx.translate(-x0, -y0);
+    ctx.rotate(degree);
+
+    ctx.drawImage(image, x0, y0, width, height);
+
+    ctx.rotate(-degree);
+    ctx.translate(x0, y0);
 
     if (bordered) {
       ctx.strokeStyle = 'gray';
@@ -90,6 +100,7 @@ function mapStateToProps (state: IImageState) {
     'image',
     'originalHeight',
     'originalWidth',
+    'rotation',
     'scale',
     'type',
     'width',

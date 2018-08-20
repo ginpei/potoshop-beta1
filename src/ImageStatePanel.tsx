@@ -13,6 +13,7 @@ type IImageStatePanelProps = any;
 
 interface IImageStatePanelState {
   bordered: boolean;
+  rotation: number;
   height: number;
   originalHeight: number;
   originalWidth: number;
@@ -29,12 +30,14 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
       height: 0,
       originalHeight: 0,
       originalWidth: 0,
+      rotation: 1,
       scale: 1,
       type: '*/*',
       width: 0,
     };
 
     this.onSlider1Change = this.onSlider1Change.bind(this);
+    this.onRotationChange = this.onRotationChange.bind(this);
     this.onBorderedClick = this.onBorderedClick.bind(this);
   }
 
@@ -66,14 +69,26 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
               </label>
             </li>
           </ul>
-          Scale:
-          <Slider className="ManagementPanel-slider1"
-            max={1}
-            min={0.01}
-            step={0.01}
-            value={this.state.scale}
-            onChange={this.onSlider1Change}
-            />
+          <div>
+            Scale:
+            <Slider className="ManagementPanel-slider1"
+              max={1}
+              min={0.01}
+              step={0.01}
+              value={this.state.scale}
+              onChange={this.onSlider1Change}
+              />
+          </div>
+          <div>
+            Rotation:
+            <Slider className="ManagementPanel-slider1"
+              max={1}
+              min={-1}
+              step={0.01}
+              value={this.state.rotation}
+              onChange={this.onRotationChange}
+              />
+          </div>
         </div>
       </div>
     );
@@ -86,6 +101,9 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
     }
     if (typeof nextProps.scale === 'number') {
       nextState.scale = nextProps.scale;
+    }
+    if (typeof nextProps.rotation === 'number') {
+      nextState.rotation = nextProps.rotation;
     }
 
     if (Object.keys(nextState).length > 0) {
@@ -101,11 +119,16 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
   protected onSlider1Change (_: any, data: ISliderEventData) {
     this.props.setScale(data.value);
   }
+
+  protected onRotationChange (_: any, data: ISliderEventData) {
+    this.props.setRotation(data.value);
+  }
 }
 
 function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
     'bordered',
+    'rotation',
     'height',
     'originalHeight',
     'originalWidth',
@@ -119,6 +142,9 @@ function mapDispatchToProps (dispatch: any) {
   return {
     setBordered: (value: boolean) => {
       dispatch({ type: 'SET_BORDERED', value });
+    },
+    setRotation: (value: number) => {
+      dispatch({ type: 'SET_ROTATION', value });
     },
     setScale: (value: number) => {
       dispatch({ type: 'SET_SCALE', value });
