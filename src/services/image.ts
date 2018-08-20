@@ -6,11 +6,22 @@ export function isJpegImage (file: File | null): boolean {
   return isImageFile(file) && file!.type === 'image/jpeg';
 }
 
+export enum ExifOrientation {
+  original = 1,
+  deg90 = 6,
+  deg180 = 3,
+  deg270 = 8,
+  flipped = 2,
+  deg90Flipped = 5,
+  deg180Flipped = 4,
+  deg270Flipped = 7,
+  unknown = -1,
+}
+
 /**
  * @see http://www.cipa.jp/std/documents/j/DC-008-2012_J.pdf
- * @returns `1` - `6` as described in the document. If not found, `-1`.
  */
-export async function getOrientation (file: File): Promise<number> {
+export async function getOrientation (file: File): Promise<ExifOrientation> {
   const jpeg = 0xffd8;
   const exifMarker = 0xffe1;
   const exifId = 0x45786966; // "E", "X", "I", "F"
