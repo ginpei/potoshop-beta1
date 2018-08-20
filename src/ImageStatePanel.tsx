@@ -13,10 +13,10 @@ type IImageStatePanelProps = any;
 
 interface IImageStatePanelState {
   bordered: boolean;
-  rotation: number;
   height: number;
   originalHeight: number;
   originalWidth: number;
+  rotation: number;
   scale: number;
   type: string;
   width: number;
