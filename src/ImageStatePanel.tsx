@@ -11,16 +11,7 @@ type IImageStatePanelProps = any;
 //   bordered: boolean;
 // };
 
-interface IImageStatePanelState {
-  bordered: boolean;
-  height: number;
-  originalHeight: number;
-  originalWidth: number;
-  rotation: number;
-  scale: number;
-  type: string;
-  width: number;
-}
+type IImageStatePanelState = IImageState;
 
 class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageStatePanelState> {
   constructor (props: IImageStatePanelProps) {
