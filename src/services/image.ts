@@ -46,7 +46,7 @@ export async function getOrientation (file: File): Promise<ExifOrientation> {
   };
   // tslint:enable:object-literal-sort-keys
 
-  const buffer = await readVileAsArrayBuffer(file);
+  const buffer = await readFileAsArrayBuffer(file);
   const arr = new Uint8Array(buffer);
   const view = new DataView(arr.buffer);
 
@@ -89,7 +89,7 @@ export async function getOrientation (file: File): Promise<ExifOrientation> {
   return -1;
 }
 
-function readVileAsArrayBuffer (file: File): Promise<ArrayBuffer> {
+function readFileAsArrayBuffer (file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as ArrayBuffer);
