@@ -18,10 +18,16 @@ export enum ExifOrientation {
   unknown = -1,
 }
 
+function sleep (ms: number) {
+  return new Promise(done => setTimeout(done, ms));
+}
+
 /**
  * @see http://www.cipa.jp/std/documents/j/DC-008-2012_J.pdf
  */
 export async function getOrientation (file: File): Promise<ExifOrientation> {
+  // TODO check why this is called twice
+
   const jpeg = 0xffd8;
   const exifMarker = 0xffe1;
   const exifId = 0x45786966; // "E", "X", "I", "F"
@@ -30,14 +36,20 @@ export async function getOrientation (file: File): Promise<ExifOrientation> {
   const orientationTag = 0x0112;
   // tslint:disable:object-literal-sort-keys
   const offsets = {
-    app1Marker: 2,
-    app1Length: 4,
-    exifId: 6,
-    tiffHeader: 12,
-    byteOrder: 12,
-    endianAssertion: 14,
-    ifdOffset: 16,
+    firstMarker: 2,
+    segment: {
+      marker: 0,
+      length: 2,
+      exifId: 4,
+    },
+    tiffHeader: {
+      fromSegment: 10,
+      byteOrder: 0,
+      endianAssertion: 2,
+      ifdOffset: 4,
+    },
     ifd: {
+      fromTiffHeader: -1,
       tag: 0,
       type: 2,
       count: 4,
@@ -51,41 +63,80 @@ export async function getOrientation (file: File): Promise<ExifOrientation> {
   const view = new DataView(arr.buffer);
 
   if (view.getUint16(0, false) !== jpeg) {
-    throw new Error('Invalid JPEG format');
+    throw new Error('Invalid JPEG format: first 2 bytes');
   }
 
-  // Exif p.18, 19
-  const marker = view.getUint16(offsets.app1Marker, false);
-  const id = view.getUint32(offsets.exifId, false);
-  if (marker !== exifMarker || id !== exifId) {
-    // this JPEG is not Exif
-    // thus orientation would not be set
+  // APPx/Exif p.18, 19
+  // - marker (short) `0xffe1` = APP1
+  // - length (short) of segment
+  // - padding (short) `0x0000` if exif
+  // - "EXIF" (char[4]) if exif
+  // - content
+  // (The doc describe APP1 have to lay next to the SOI,
+  //  however, Photoshop renders a JPEG file that SOI is followed by APP0.)
+  let segmentPosition = offsets.firstMarker;
+  while (true) {
+    // just in case
+    await sleep(1);
+
+    const marker = view.getUint16(segmentPosition + offsets.segment.marker, false);
+    if (marker === exifMarker) {
+      const id = view.getUint32(segmentPosition + offsets.segment.exifId, false);
+      if (id === exifId) {
+        // found, yay!
+        break;
+      } else {
+        console.warn('APP1 is not exif format', `0x${marker.toString(16)}, 0x${id.toString(16)}`);
+        return -1;
+      }
+    }
+
+    const offsetLength = offsets.segment.length;
+    const length = offsetLength + view.getUint16(segmentPosition + offsetLength, false);
+    segmentPosition += length;
+
+    if (segmentPosition > view.byteLength) {
+      console.warn('APP1 not found');
     return -1;
   }
+  }
+  const tiffHeaderOffset = segmentPosition + offsets.tiffHeader.fromSegment;
 
   // TIFF Header p.17
-  const littleEndian = view.getUint16(offsets.byteOrder, false) === orderLittleEndian;
-  if (view.getUint16(14, littleEndian) !== endianAssertion) {
-    throw new Error('Invalid JPEG format');
+  // - byte order (short). `0x4949` = little, `0x4d4d` = big
+  // - 42 (0x002a) (short)
+  // - offset of IFD (long). Minimum is `0x00000008` (8).
+  const littleEndian = view.getUint16(tiffHeaderOffset + offsets.tiffHeader.byteOrder, false) === orderLittleEndian;
+  const endianAssertionValue = view.getUint16(tiffHeaderOffset + offsets.tiffHeader.endianAssertion, littleEndian);
+  if (endianAssertionValue !== endianAssertion) {
+    throw new Error(`Invalid JPEG format: littleEndian ${littleEndian}, assertion: 0x${endianAssertionValue}`);
   }
-  const idfDistance = view.getUint32(offsets.ifdOffset, littleEndian);
-  const idfOffset = offsets.tiffHeader + idfDistance;
+  const idfDistance = view.getUint32(tiffHeaderOffset + offsets.tiffHeader.ifdOffset, littleEndian);
+  const idfPosition = tiffHeaderOffset + idfDistance;
 
   // IFD p.23
-  const numOfIdfFields = view.getUint16(idfOffset, littleEndian);
-  const idfValuesOffset = idfOffset + 2;
+  // - num of IFD fields (short)
+  // - IFD:
+  //   - tag (short)
+  //   - type (short)
+  //   - count (long)
+  //   - value offset (long)
+  // - IFD...
+  const numOfIdfFields = view.getUint16(idfPosition, littleEndian);
+  const idfValuesPosition = idfPosition + 2;
   const fieldLength = 12;
   for (let i = 0; i < numOfIdfFields; i++) {
-    const currentOffset = idfValuesOffset + (i * fieldLength);
-    const tag = view.getUint16(currentOffset, littleEndian);
+    const currentOffset = i * fieldLength;
+    const tag = view.getUint16(idfValuesPosition + currentOffset, littleEndian);
     if (tag === orientationTag) {
       const valueOffset = currentOffset + offsets.ifd.value;
-      const orientation = view.getUint16(valueOffset, littleEndian);
+      const orientation = view.getUint16(idfValuesPosition + valueOffset, littleEndian);
       return orientation;
     }
   }
 
   // not found
+  console.warn('Rotation information was not found');
   return -1;
 }
 
