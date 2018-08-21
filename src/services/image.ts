@@ -149,21 +149,85 @@ function readFileAsArrayBuffer (file: File): Promise<ArrayBuffer> {
   });
 }
 
-export function readImage (file: File): Promise<HTMLImageElement | null> {
+export async function readImage (file: File): Promise<HTMLImageElement | null> {
   if (!file || !file.type.startsWith('image/')) {
-    return Promise.resolve(null);
+    return null;
   }
 
+  const originalImage = await readFileAsImage(file);
+  const orientation = await getOrientation(file);
+  const modifiedImage = applyImageOrientation(originalImage, orientation);
+  return modifiedImage;
+}
+
+function readFileAsImage (file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      const url = String(reader.result);
       const image = document.createElement('img');
-      image.src = url;
+      image.src = reader.result as string;
       // Firefox sometimes doesn't render immediately
       setTimeout(() => resolve(image), 1);
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrientation): HTMLImageElement {
+  const width = image.naturalWidth;
+  const height = image.naturalHeight;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) { throw new Error('Failed to get canvas context'); }
+
+  let canvasWidth = 0;
+  let canvasHeight = 0;
+  let x0 = 0;
+  let y0 = 0;
+  let degree = 0;
+  if (orientation === ExifOrientation.original || orientation === ExifOrientation.unknown) {
+    canvasWidth = width;
+    canvasHeight = height;
+    x0 = 0;
+    y0 = 0;
+    degree = 0;
+  }
+  else if (orientation === ExifOrientation.deg90) {
+    canvasWidth = height;
+    canvasHeight = width;
+    x0 = 0;
+    y0 = -height;
+    degree = 90;
+  }
+  else if (orientation === ExifOrientation.deg180) {
+    canvasWidth = width;
+    canvasHeight = height;
+    x0 = -width;
+    y0 = -height;
+    degree = 180;
+  }
+  else if (orientation === ExifOrientation.deg270) {
+    canvasWidth = height;
+    canvasHeight = width;
+    x0 = -width;
+    y0 = 0;
+    degree = 270;
+  }
+  else {
+    // ignore flipping
+    throw new Error(`Unknown orientation type: ${orientation}`);
+  }
+
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+  ctx.rotate(degree / 360 * 2 * Math.PI);
+  ctx.translate(x0, y0);
+  ctx.drawImage(image, 0, 0, width, height);
+
+  const modified = document.createElement('img');
+  modified.src = canvas.toDataURL('image/jpeg');
+
+  return modified;
 }
