@@ -75,7 +75,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     const degree = rotation * 2 * Math.PI;
 
     const ctx = this.elCanvas!.getContext('2d');
-    if (!ctx) { throw new Error('Failed to get canvas context') }
+    if (!ctx) { throw new Error('Failed to get canvas context'); }
     this.elCanvas.width = width;
     this.elCanvas.height = height;
 
