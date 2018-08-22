@@ -182,55 +182,53 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
   const ctx = canvas.getContext('2d');
   if (!ctx) { throw new Error('Failed to get canvas context'); }
 
-  let canvasWidth = 0;
-  let canvasHeight = 0;
-  let x0 = 0;
-  let y0 = 0;
+  const deg90 = orientation === ExifOrientation.deg90 ||
+    orientation === ExifOrientation.deg90Flipped;
+  const deg180 = orientation === ExifOrientation.deg180 ||
+    orientation === ExifOrientation.deg180Flipped;
+  const deg270 = orientation === ExifOrientation.deg270 ||
+    orientation === ExifOrientation.deg270Flipped;
+  const deg0 = !(deg90 || deg180 || deg270);
+  const flipped = orientation === ExifOrientation.flipped ||
+    orientation === ExifOrientation.deg90Flipped ||
+    orientation === ExifOrientation.deg180Flipped ||
+    orientation === ExifOrientation.deg270Flipped;
+  console.log(flipped)
+
+  const canvasWidth = deg0 || deg180 ? width : height;
+  const canvasHeight = deg0 || deg180 ? height : width;
+  const x0 = deg0 || deg90 ? 0 : -width;
+  const y0 = deg0 || deg270 ? 0 : -height;;
   let degree = 0;
-  if (orientation === ExifOrientation.original || orientation === ExifOrientation.unknown) {
-    canvasWidth = width;
-    canvasHeight = height;
-    x0 = 0;
-    y0 = 0;
+  if (deg0) {
     degree = 0;
-  }
-  else if (orientation === ExifOrientation.deg90) {
-    canvasWidth = height;
-    canvasHeight = width;
-    x0 = 0;
-    y0 = -height;
+  } else if (deg90) {
     degree = 90;
-  }
-  else if (orientation === ExifOrientation.deg180) {
-    canvasWidth = width;
-    canvasHeight = height;
-    x0 = -width;
-    y0 = -height;
+  } else if (deg180) {
     degree = 180;
-  }
-  else if (orientation === ExifOrientation.deg270) {
-    canvasWidth = height;
-    canvasHeight = width;
-    x0 = -width;
-    y0 = 0;
+  } else if (deg270) {
     degree = 270;
   }
   else {
-    // ignore flipping
     throw new Error(`Unknown orientation type: ${orientation}`);
   }
 
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+  if (flipped) {
+    ctx.translate(canvasWidth, 0);
+    ctx.scale(-1, 1);
+  }
+
   ctx.rotate(degree / 360 * 2 * Math.PI);
   ctx.translate(x0, y0);
   ctx.drawImage(image, 0, 0, width, height);
 
   return new Promise((resolve, reject) => {
-  const modified = document.createElement('img');
+    const modified = document.createElement('img');
     // Firefox sometimes doesn't render immediately so wait a msec
     modified.onload = () => setTimeout(() => resolve(modified), 1);
     modified.onerror = reject;
-  modified.src = canvas.toDataURL('image/jpeg');
+    modified.src = canvas.toDataURL('image/jpeg');
   });
 }
