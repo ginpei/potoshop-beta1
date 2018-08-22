@@ -156,7 +156,7 @@ export async function readImage (file: File): Promise<HTMLImageElement | null> {
 
   const originalImage = await readFileAsImage(file);
   const orientation = await getOrientation(file);
-  const modifiedImage = applyImageOrientation(originalImage, orientation);
+  const modifiedImage = await applyImageOrientation(originalImage, orientation);
   return modifiedImage;
 }
 
@@ -174,7 +174,7 @@ function readFileAsImage (file: File): Promise<HTMLImageElement> {
   });
 }
 
-function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrientation): HTMLImageElement {
+function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrientation): Promise<HTMLImageElement> {
   const width = image.naturalWidth;
   const height = image.naturalHeight;
 
@@ -226,8 +226,11 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
   ctx.translate(x0, y0);
   ctx.drawImage(image, 0, 0, width, height);
 
+  return new Promise((resolve, reject) => {
   const modified = document.createElement('img');
+    // Firefox sometimes doesn't render immediately so wait a msec
+    modified.onload = () => setTimeout(() => resolve(modified), 1);
+    modified.onerror = reject;
   modified.src = canvas.toDataURL('image/jpeg');
-
-  return modified;
+  });
 }
