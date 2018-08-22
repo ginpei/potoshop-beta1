@@ -193,7 +193,6 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
     orientation === ExifOrientation.deg90Flipped ||
     orientation === ExifOrientation.deg180Flipped ||
     orientation === ExifOrientation.deg270Flipped;
-  console.log(flipped)
 
   const canvasWidth = deg0 || deg180 ? width : height;
   const canvasHeight = deg0 || deg180 ? height : width;
