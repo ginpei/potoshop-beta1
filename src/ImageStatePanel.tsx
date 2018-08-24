@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Slider, { ISliderEventData } from './components/Slider';
 import './ImageStatePanel.css';
 import './ManagementPanel.css';
-import { IImageState } from './store/imageState';
+import imageState, { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
 type IImageStatePanelProps = any;
@@ -16,19 +16,7 @@ type IImageStatePanelState = IImageState;
 class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageStatePanelState> {
   constructor (props: IImageStatePanelProps) {
     super(props);
-    this.state = {
-      bordered: 'bordered' in props ? props.bordered : true,
-      flipH: false,
-      flipV: false,
-      height: 0,
-      image: null,
-      originalHeight: 0,
-      originalWidth: 0,
-      rotation: 1,
-      scale: 1,
-      type: '*/*',
-      width: 0,
-    };
+    this.state = imageState.getState();
 
     this.onSlider1Change = this.onSlider1Change.bind(this);
     this.onRotationChange = this.onRotationChange.bind(this);
