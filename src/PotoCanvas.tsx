@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
-import { getOrientation, isJpegImage, readImage } from './services/image';
+import { readImage } from './services/image';
 import imageState, { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
@@ -48,10 +48,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
 
     const file = el.files[0];
     imageState.dispatch({ type: 'SET_TYPE', value: file.type });
-    if (isJpegImage(file)) {
-      const orientation = await getOrientation(file);
-      console.log(orientation);
-    }
+
     const image = await readImage(file);
     if (image) {
       imageState.dispatch({ type: 'SET_IMAGE', value: image });
