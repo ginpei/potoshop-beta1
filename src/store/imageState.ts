@@ -8,7 +8,7 @@ export interface IImageState {
   flipH: boolean;
   flipV: boolean;
   height: number;
-  image?: HTMLImageElement,
+  image?: HTMLImageElement;
   originalHeight: number;
   originalWidth: number;
   rotation: number;

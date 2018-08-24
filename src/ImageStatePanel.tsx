@@ -168,7 +168,7 @@ function mapStateToProps (state: IImageState) {
     'type',
     'width',
   ]);
-};
+}
 
 function mapDispatchToProps (dispatch: any) {
   return {

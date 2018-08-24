@@ -19,7 +19,7 @@ interface ISliderState {
 }
 
 export interface ISliderEventData {
-  value: number,
+  value: number;
 }
 
 class Slider extends React.Component<ISliderProps, ISliderState> {

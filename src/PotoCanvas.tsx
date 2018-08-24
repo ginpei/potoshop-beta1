@@ -112,6 +112,6 @@ function mapStateToProps (state: IImageState) {
     'type',
     'width',
   ]);
-};
+}
 
 export default connect(mapStateToProps)(PotoCanvas);

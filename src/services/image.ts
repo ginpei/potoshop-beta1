@@ -206,7 +206,7 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
   const canvasWidth = deg0 || deg180 ? width : height;
   const canvasHeight = deg0 || deg180 ? height : width;
   const x0 = deg0 || deg90 ? 0 : -width;
-  const y0 = deg0 || deg270 ? 0 : -height;;
+  const y0 = deg0 || deg270 ? 0 : -height;
   let degree = 0;
   if (deg0) {
     degree = 0;
