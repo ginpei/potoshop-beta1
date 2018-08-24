@@ -14,7 +14,7 @@ class App extends React.Component {
     this.onPaste = this.onPaste.bind(this);
   }
 
-  public render() {
+  public render () {
     return (
       <Provider store={imageState}>
         <div className="App">

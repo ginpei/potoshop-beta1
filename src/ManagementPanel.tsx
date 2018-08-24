@@ -3,7 +3,7 @@ import ImageStatePanel from './ImageStatePanel';
 import './ManagementPanel.css';
 
 class ManagementPanel extends React.Component {
-  public render() {
+  public render () {
     return (
       <div className="ManagementPanel">
         <ImageStatePanel />

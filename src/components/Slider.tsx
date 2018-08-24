@@ -40,7 +40,7 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
     this.onNumberInput = this.onNumberInput.bind(this);
   }
 
-  public render() {
+  public render () {
     return (
       <div className={`Slider ${this.props.className}`}>
         <input type="range" className="Slider-range"

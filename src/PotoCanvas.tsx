@@ -14,7 +14,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     super(props);
   }
 
-  public render() {
+  public render () {
     const fileOpener = this.props.image ? undefined : (
       <div className="PotoCanvas">
         <p>
@@ -57,7 +57,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     }
   }
 
-  protected updateCanvas(props: IPotoCanvasProps) {
+  protected updateCanvas (props: IPotoCanvasProps) {
     if (!this.elCanvas) { return; }
 
     const {
