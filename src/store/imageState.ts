@@ -8,7 +8,7 @@ export interface IImageState {
   flipH: boolean;
   flipV: boolean;
   height: number;
-  image?: HTMLImageElement;
+  image: HTMLImageElement | null;
   originalHeight: number;
   originalWidth: number;
   rotation: number;
@@ -22,7 +22,7 @@ const initialImageState: IImageState = {
   flipH: false,
   flipV: false,
   height: 0,
-  image: undefined,
+  image: null,
   originalHeight: 0,
   originalWidth: 0,
   rotation: 0,
@@ -39,9 +39,9 @@ const actions = Object.assign(autoActions([
   'type',
 ]), {
   SET_IMAGE: (state: IImageState, action: IAction) => {
-    const image: HTMLImageElement = action.value;
-    const width = image.naturalWidth;
-    const height = image.naturalHeight;
+    const image: HTMLImageElement | null = action.value;
+    const width = image ? image.naturalWidth : 0;
+    const height = image ? image.naturalHeight : 0;
 
     state.image = image;
     state.originalWidth = width;

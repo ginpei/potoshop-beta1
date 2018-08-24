@@ -21,6 +21,7 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
       flipH: false,
       flipV: false,
       height: 0,
+      image: null,
       originalHeight: 0,
       originalWidth: 0,
       rotation: 1,

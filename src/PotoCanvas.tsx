@@ -35,9 +35,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
   }
 
   public componentWillReceiveProps (nextProps: IPotoCanvasProps) {
-    if (nextProps.image) {
-      this.updateCanvas(nextProps);
-    }
+    this.updateCanvas(nextProps);
   }
 
   protected async onFileChange (event: React.ChangeEvent<HTMLInputElement>) {
@@ -56,6 +54,9 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
   protected updateCanvas (props: IPotoCanvasProps) {
     if (!this.elCanvas) { return; }
 
+    const ctx = this.elCanvas!.getContext('2d');
+    if (!ctx) { throw new Error('Failed to get canvas context'); }
+
     const {
       bordered,
       flipH,
@@ -65,13 +66,16 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       rotation,
       width,
     } = props;
-    if (!image) { return; }
+
+    if (!image) {
+      this.elCanvas.width = 0;
+      this.elCanvas.height = 0;
+      return;
+    }
+
     const x0 = -width / 2;
     const y0 = -height / 2;
     const degree = rotation * 2 * Math.PI;
-
-    const ctx = this.elCanvas!.getContext('2d');
-    if (!ctx) { throw new Error('Failed to get canvas context'); }
     this.elCanvas.width = width;
     this.elCanvas.height = height;
 

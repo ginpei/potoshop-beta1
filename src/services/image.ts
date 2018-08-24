@@ -151,7 +151,7 @@ function readFileAsArrayBuffer (file: File): Promise<ArrayBuffer> {
   });
 }
 
-export async function readImage (file: File): Promise<HTMLImageElement | null> {
+export async function readImage (file: File | null): Promise<HTMLImageElement | null> {
   if (!file || !file.type.startsWith('image/')) {
     return null;
   }
@@ -243,18 +243,9 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
   });
 }
 
-export async function setImageFile (file: File) {
-  if (!file) {
-    throw new Error('File must be set');
-  }
-
-  imageState.dispatch({ type: 'SET_TYPE', value: file.type });
+export async function setImageFile (file: File | null) {
+  imageState.dispatch({ type: 'SET_TYPE', value: file ? file.type : '' });
 
   const image = await readImage(file);
-  if (image) {
-    imageState.dispatch({ type: 'SET_IMAGE', value: image });
-  } else {
-    // TODO show any message for user
-    console.warn('That was not an image');
-  }
+  imageState.dispatch({ type: 'SET_IMAGE', value: image });
 }
