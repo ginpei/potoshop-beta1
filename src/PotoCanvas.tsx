@@ -47,6 +47,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     }
 
     const file = el.files[0];
+    imageState.dispatch({ type: 'SET_TYPE', value: file.type });
     if (isJpegImage(file)) {
       const orientation = await getOrientation(file);
       console.log(orientation);
