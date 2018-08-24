@@ -3,8 +3,14 @@
   grid-gap: 5%;
   grid-template:
     "range number" auto
-    / 65% 30%;
+    / auto 50px;
 }
+  .Slider > input {
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+  }
+
   .Slider-range {
     grid-area: range;
   }
