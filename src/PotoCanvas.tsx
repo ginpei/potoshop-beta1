@@ -52,6 +52,9 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     const image = await readImage(file);
     if (image) {
       imageState.dispatch({ type: 'SET_IMAGE', value: image });
+    } else {
+      // TODO show any message for user
+      console.warn('That was not an image');
     }
   }
 
