@@ -8,16 +8,30 @@ import PotoCanvas from './PotoCanvas';
 import { readImage } from './services/image';
 import imageState from './store/imageState';
 
-class App extends React.Component {
+interface IAppState {
+  dragover: boolean;
+}
+
+class App extends React.Component<{}, IAppState> {
   constructor (props: any) {
     super(props);
+
+    this.state = {
+      dragover: false,
+    };
+
     this.onPaste = this.onPaste.bind(this);
+    this.onDragOver = this.onDragOver.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+    this.onDragLeave = this.onDragLeave.bind(this);
   }
 
   public render () {
     return (
       <Provider store={imageState}>
-        <div className="App">
+        <div className="App"
+          data-drag-over={this.state.dragover}
+          >
           <div className="App-Header">
             <AppHeader />
           </div>
@@ -40,10 +54,16 @@ class App extends React.Component {
 
   public componentDidMount () {
     document.addEventListener('paste', this.onPaste);
+    document.addEventListener('dragover', this.onDragOver);
+    document.addEventListener('drop', this.onDrop);
+    document.addEventListener('dragleave', this.onDragLeave);
   }
 
   public componentWillUnmount () {
     document.removeEventListener('paste', this.onPaste);
+    document.removeEventListener('dragover', this.onDragOver);
+    document.removeEventListener('drop', this.onDrop);
+    document.removeEventListener('dragleave', this.onDragLeave);
   }
 
   protected async onPaste (event: ClipboardEvent) {
@@ -62,6 +82,41 @@ class App extends React.Component {
     if (image) {
       imageState.dispatch({ type: 'SET_IMAGE', value: image });
     }
+  }
+
+  protected onDragOver (event: DragEvent) {
+    event.preventDefault();
+    this.setState({
+      dragover: event.dataTransfer.types.includes('Files'),
+    });
+  }
+
+  protected async onDrop (event: DragEvent) {
+    event.preventDefault();
+    this.setState({
+      dragover: false,
+    });
+
+    const { files } = event.dataTransfer;
+    if (files.length < 1) {
+      return;
+    }
+    const file = files[0];
+    imageState.dispatch({ type: 'SET_TYPE', value: file.type });
+
+    const image = await readImage(file);
+    if (image) {
+      imageState.dispatch({ type: 'SET_IMAGE', value: image });
+    } else {
+      // TODO show any message for user
+      console.warn('That was not an image');
+    }
+  }
+
+  protected onDragLeave () {
+    this.setState({
+      dragover: false,
+    });
   }
 }
 

@@ -50,6 +50,10 @@ body {
   width: 100%;
 }
 
+  .App[data-drag-over="true"] {
+    background-color: azure;
+  }
+
   .App > * {
     overflow: auto;
   }
