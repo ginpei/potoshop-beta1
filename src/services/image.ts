@@ -1,3 +1,5 @@
+import imageState from '../store/imageState';
+
 export function isImageFile (file: File | null): boolean {
   return Boolean(file && file.type.startsWith('image/'));
 }
@@ -239,4 +241,20 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
     modified.onerror = reject;
     modified.src = canvas.toDataURL('image/jpeg');
   });
+}
+
+export async function setImageFile (file: File) {
+  if (!file) {
+    throw new Error('File must be set');
+  }
+
+  imageState.dispatch({ type: 'SET_TYPE', value: file.type });
+
+  const image = await readImage(file);
+  if (image) {
+    imageState.dispatch({ type: 'SET_IMAGE', value: image });
+  } else {
+    // TODO show any message for user
+    console.warn('That was not an image');
+  }
 }

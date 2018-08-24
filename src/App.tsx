@@ -5,7 +5,7 @@ import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
 import PotoCanvas from './PotoCanvas';
-import { readImage } from './services/image';
+import { setImageFile } from './services/image';
 import imageState from './store/imageState';
 
 interface IAppState {
@@ -76,11 +76,8 @@ class App extends React.Component<{}, IAppState> {
     }
 
     const file = item.getAsFile();
-    if (!file) { throw new Error('Failed to get file'); }
-
-    const image = await readImage(file);
-    if (image) {
-      imageState.dispatch({ type: 'SET_IMAGE', value: image });
+    if (file) {
+      setImageFile(file);
     }
   }
 
@@ -101,16 +98,7 @@ class App extends React.Component<{}, IAppState> {
     if (files.length < 1) {
       return;
     }
-    const file = files[0];
-    imageState.dispatch({ type: 'SET_TYPE', value: file.type });
-
-    const image = await readImage(file);
-    if (image) {
-      imageState.dispatch({ type: 'SET_IMAGE', value: image });
-    } else {
-      // TODO show any message for user
-      console.warn('That was not an image');
-    }
+    setImageFile(files[0]);
   }
 
   protected onDragLeave () {

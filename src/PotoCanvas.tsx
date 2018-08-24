@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
-import { readImage } from './services/image';
-import imageState, { IImageState } from './store/imageState';
+import { setImageFile } from './services/image';
+import { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasProps = IImageState;
@@ -46,16 +46,11 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       return;
     }
 
-    const file = el.files[0];
-    imageState.dispatch({ type: 'SET_TYPE', value: file.type });
-
-    const image = await readImage(file);
-    if (image) {
-      imageState.dispatch({ type: 'SET_IMAGE', value: image });
-    } else {
-      // TODO show any message for user
-      console.warn('That was not an image');
+    const { files } = el;
+    if (files.length < 1) {
+      return;
     }
+    setImageFile(files[0]);
   }
 
   protected updateCanvas (props: IPotoCanvasProps) {
