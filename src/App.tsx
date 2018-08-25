@@ -7,6 +7,7 @@ import ManagementPanel from './ManagementPanel';
 import PotoCanvas from './PotoCanvas';
 import { setImageFile } from './services/image';
 import imageState from './store/imageState';
+import Toolbar from './Toolbar';
 
 interface IAppState {
   dragover: boolean;
@@ -39,7 +40,7 @@ class App extends React.Component<{}, IAppState> {
             <PotoCanvas />
           </div>
           <div className="App-Left">
-            <div>Tools</div>
+            <Toolbar />
           </div>
           <div className="App-Right">
             <ManagementPanel />
