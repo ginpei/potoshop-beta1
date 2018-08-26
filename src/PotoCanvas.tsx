@@ -8,7 +8,7 @@ import { autoMapStateToProps } from './store/util';
 type IPotoCanvasProps = IImageState;
 
 class PotoCanvas extends React.Component<IPotoCanvasProps> {
-  private elCanvas: HTMLCanvasElement | null;
+  private elCanvas: HTMLCanvasElement;
 
   constructor (props: any) {
     super(props);
@@ -29,7 +29,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     return (
       <div className="PotoCanvas">
         {fileOpener}
-        <canvas className="PotoCanvas-canvas" ref={el => this.elCanvas = el} />
+        <canvas className="PotoCanvas-canvas" ref={el => el && (this.elCanvas = el)} />
       </div>
     );
   }
@@ -52,9 +52,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
   }
 
   protected updateCanvas (props: IPotoCanvasProps) {
-    if (!this.elCanvas) { return; }
-
-    const ctx = this.elCanvas!.getContext('2d');
+    const ctx = this.elCanvas.getContext('2d');
     if (!ctx) { throw new Error('Failed to get canvas context'); }
 
     const {
