@@ -29,7 +29,9 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     return (
       <div className="PotoCanvas">
         {fileOpener}
-        <canvas className="PotoCanvas-canvas" ref={el => el && (this.elCanvas = el)} />
+        <canvas className="PotoCanvas-canvas"
+          ref={el => el && (this.elCanvas = el)}
+          />
       </div>
     );
   }
