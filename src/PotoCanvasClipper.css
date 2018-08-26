@@ -1,0 +1,28 @@
+.PotoCanvasClipper {
+  --shadow-color: #3339;
+
+  left: var(--app-space);
+  position: absolute;
+  top: var(--app-space);
+}
+  .PotoCanvasClipper-shadow {
+    background-color: var(--shadow-color);
+    position: absolute;
+  }
+
+  .PotoCanvasClipper-wrapper {
+    position: absolute;
+    border: 3px solid tomato;
+    left: 1rem;
+    top: 1rem;
+    width: 80px;
+    height: 60px;
+  }
+  .PotoCanvasClipper-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: green;
+    right: 0;
+    bottom: 0;
+  }

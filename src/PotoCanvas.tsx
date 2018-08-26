@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
+import PotoCanvasClipper from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
 import { IImageState } from './store/imageState';
@@ -25,6 +26,17 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       <div className="PotoCanvas">
         {fileOpener}
         <PotoCanvasImage {...this.props} />
+        <PotoCanvasClipper
+          active={false}
+          clipRect={{
+            height: 20,
+            left: 10,
+            top: 10,
+            width: 20,
+          }}
+          width={this.props.width || 0}
+          height={this.props.height || 0}
+          />
       </div>
     );
   }
@@ -45,7 +57,9 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
 
 function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
+    'height',
     'image',
+    'width',
   ]);
 }
 
