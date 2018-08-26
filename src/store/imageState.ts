@@ -31,6 +31,15 @@ const initialImageState: IImageState = {
   width: 0,
 };
 
+export function defaultState (preferences: Partial<IImageState>): IImageState {
+  return Object.entries(preferences).reduce((obj, [key, value]) => {
+    if (value !== undefined) {
+      obj[key] = value;
+    }
+    return obj;
+  }, Object.assign({}, initialImageState));
+}
+
 const actions = Object.assign(autoActions([
   'bordered',
   'flipH',

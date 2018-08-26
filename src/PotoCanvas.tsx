@@ -2,15 +2,15 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
 import { setImageFile } from './services/image';
-import { IImageState } from './store/imageState';
+import { defaultState, IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
-type IPotoCanvasProps = IImageState;
+type IPotoCanvasProps = Partial<IImageState>;
 
 class PotoCanvas extends React.Component<IPotoCanvasProps> {
   private elCanvas: HTMLCanvasElement;
 
-  constructor (props: any) {
+  constructor (props: IPotoCanvasProps) {
     super(props);
   }
 
@@ -65,7 +65,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       image,
       rotation,
       width,
-    } = props;
+    } = defaultState(props);
 
     if (!image) {
       this.elCanvas.width = 0;
