@@ -23,8 +23,8 @@ export interface ISliderEventData {
 }
 
 class Slider extends React.Component<ISliderProps, ISliderState> {
-  private elNumber: HTMLInputElement | null;
-  private elRange: HTMLInputElement | null;
+  private elNumber = React.createRef<HTMLInputElement>();
+  private elRange = React.createRef<HTMLInputElement>();
 
   constructor (props: ISliderProps) {
     super(props);
@@ -44,7 +44,7 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
     return (
       <div className={`Slider ${this.props.className}`}>
         <input type="range" className="Slider-range"
-          ref={el => this.elRange = el}
+          ref={this.elRange}
           max={this.state.max}
           min={this.state.min}
           step={this.state.step}
@@ -52,7 +52,7 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
           onChange={this.onRangeInput}
           />
         <input type="number" className="Slider-number"
-          ref={el => this.elNumber = el}
+          ref={this.elNumber}
           max={this.state.max}
           min={this.state.min}
           step={this.state.step}
@@ -72,12 +72,20 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
 
   protected onRangeInput (event: any) {
     if (!this.props.onChange) { return; }
-    this.props.onChange(event, { value: Number(this.elRange!.value) });
+    const el = this.elRange.current;
+    if (!el) {
+      throw new Error('Element is not ready');
+    }
+    this.props.onChange(event, { value: Number(el.value) });
   }
 
   protected onNumberInput (event: any) {
     if (!this.props.onChange) { return; }
-    this.props.onChange(event, { value: Number(this.elNumber!.value) });
+    const el = this.elNumber.current;
+    if (!el) {
+      throw new Error('Element is not ready');
+    }
+    this.props.onChange(event, { value: Number(el.value) });
   }
 }
 

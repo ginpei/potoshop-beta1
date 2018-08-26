@@ -7,12 +7,12 @@ import { autoMapStateToProps } from './store/util';
 type IPotoCanvasImageProps = Partial<IImageState>;
 
 class PotoCanvasImage extends React.Component<IPotoCanvasImageProps> {
-  private elCanvas: HTMLCanvasElement;
+  private elCanvas = React.createRef<HTMLCanvasElement>();
 
   public render () {
     return (
       <canvas className="PotoCanvasImage"
-        ref={el => el && (this.elCanvas = el)}
+        ref={this.elCanvas}
         />
     );
   }
@@ -22,7 +22,12 @@ class PotoCanvasImage extends React.Component<IPotoCanvasImageProps> {
   }
 
   protected updateCanvas (props: IPotoCanvasImageProps) {
-    const ctx = this.elCanvas.getContext('2d');
+    const elCanvas = this.elCanvas.current;
+    if (!elCanvas) {
+      throw new Error('Element is not ready');
+    }
+
+    const ctx = elCanvas.getContext('2d');
     if (!ctx) { throw new Error('Failed to get canvas context'); }
 
     const {
@@ -36,16 +41,16 @@ class PotoCanvasImage extends React.Component<IPotoCanvasImageProps> {
     } = defaultState(props);
 
     if (!image) {
-      this.elCanvas.width = 0;
-      this.elCanvas.height = 0;
+      elCanvas.width = 0;
+      elCanvas.height = 0;
       return;
     }
 
     const x0 = -width / 2;
     const y0 = -height / 2;
     const degree = rotation * 2 * Math.PI;
-    this.elCanvas.width = width;
-    this.elCanvas.height = height;
+    elCanvas.width = width;
+    elCanvas.height = height;
 
     ctx.translate(-x0, -y0);
     ctx.rotate(degree);
