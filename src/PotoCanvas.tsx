@@ -1,19 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvas.css';
+import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
-import { defaultState, IImageState } from './store/imageState';
+import { IImageState } from './store/imageState';
 import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasProps = Partial<IImageState>;
 
 class PotoCanvas extends React.Component<IPotoCanvasProps> {
-  private elCanvas: HTMLCanvasElement;
-
-  constructor (props: IPotoCanvasProps) {
-    super(props);
-  }
-
   public render () {
     const fileOpener = this.props.image ? undefined : (
       <div className="PotoCanvas">
@@ -29,15 +24,9 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     return (
       <div className="PotoCanvas">
         {fileOpener}
-        <canvas className="PotoCanvas-canvas"
-          ref={el => el && (this.elCanvas = el)}
-          />
+        <PotoCanvasImage {...this.props} />
       </div>
     );
-  }
-
-  public componentWillReceiveProps (nextProps: IPotoCanvasProps) {
-    this.updateCanvas(nextProps);
   }
 
   protected async onFileChange (event: React.ChangeEvent<HTMLInputElement>) {
@@ -52,64 +41,11 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
     }
     setImageFile(files[0]);
   }
-
-  protected updateCanvas (props: IPotoCanvasProps) {
-    const ctx = this.elCanvas.getContext('2d');
-    if (!ctx) { throw new Error('Failed to get canvas context'); }
-
-    const {
-      bordered,
-      flipH,
-      flipV,
-      height,
-      image,
-      rotation,
-      width,
-    } = defaultState(props);
-
-    if (!image) {
-      this.elCanvas.width = 0;
-      this.elCanvas.height = 0;
-      return;
-    }
-
-    const x0 = -width / 2;
-    const y0 = -height / 2;
-    const degree = rotation * 2 * Math.PI;
-    this.elCanvas.width = width;
-    this.elCanvas.height = height;
-
-    ctx.translate(-x0, -y0);
-    ctx.rotate(degree);
-    ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
-
-    ctx.drawImage(image, x0, y0, width, height);
-
-    ctx.scale(1, 1);
-    ctx.rotate(-degree);
-    ctx.translate(x0, y0);
-
-    if (bordered) {
-      ctx.strokeStyle = 'gray';
-      ctx.rect(0, 0, width, height);
-      ctx.stroke();
-    }
-  }
 }
 
 function mapStateToProps (state: IImageState) {
   return autoMapStateToProps(state, [
-    'bordered',
-    'flipH',
-    'flipV',
-    'height',
     'image',
-    'originalHeight',
-    'originalWidth',
-    'rotation',
-    'scale',
-    'type',
-    'width',
   ]);
 }
 
