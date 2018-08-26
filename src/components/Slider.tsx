@@ -7,7 +7,7 @@ interface ISliderProps {
   min?: number;
   step?: number;
   value: number;
-  onChange?: (event: Event, data: ISliderEventData) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, data: ISliderEventData) => void;
 }
 
 interface ISliderState {
@@ -22,11 +22,7 @@ export interface ISliderEventData {
   value: number;
 }
 
-class Slider extends React.Component<ISliderProps, ISliderState> {
-  private elNumber = React.createRef<HTMLInputElement>();
-  private elRange = React.createRef<HTMLInputElement>();
-
-  constructor (props: ISliderProps) {
+class Slider extends React.Component<ISliderProps, ISliderState> {  constructor (props: ISliderProps) {
     super(props);
     this.state = {
       max: props.max || 100,
@@ -44,7 +40,6 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
     return (
       <div className={`Slider ${this.props.className}`}>
         <input type="range" className="Slider-range"
-          ref={this.elRange}
           max={this.state.max}
           min={this.state.min}
           step={this.state.step}
@@ -52,7 +47,6 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
           onChange={this.onRangeInput}
           />
         <input type="number" className="Slider-number"
-          ref={this.elNumber}
           max={this.state.max}
           min={this.state.min}
           step={this.state.step}
@@ -70,21 +64,15 @@ class Slider extends React.Component<ISliderProps, ISliderState> {
     });
   }
 
-  protected onRangeInput (event: any) {
+  protected onRangeInput (event: React.ChangeEvent<HTMLInputElement>) {
     if (!this.props.onChange) { return; }
-    const el = this.elRange.current;
-    if (!el) {
-      throw new Error('Element is not ready');
-    }
+    const el = event.currentTarget;
     this.props.onChange(event, { value: Number(el.value) });
   }
 
-  protected onNumberInput (event: any) {
+  protected onNumberInput (event: React.ChangeEvent<HTMLInputElement>) {
     if (!this.props.onChange) { return; }
-    const el = this.elNumber.current;
-    if (!el) {
-      throw new Error('Element is not ready');
-    }
+    const el = event.currentTarget;
     this.props.onChange(event, { value: Number(el.value) });
   }
 }
