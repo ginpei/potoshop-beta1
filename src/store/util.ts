@@ -2,14 +2,22 @@ function camelToSnake (name: string): string {
   return name.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
 }
 
-export function autoActions (names: string[]) {
-  return names.reduce((obj, name) => {
+export function autoActions (actions: any) {
+  const names: string[] = actions.values || [];
+  const result = names.reduce((obj: any, name: string) => {
     const actionName = `SET_${camelToSnake(name).toUpperCase()}`;
     obj[actionName] = (state: any, action: any) => {
       state[name] = action.value;
     };
     return obj;
   }, {});
+
+  Object.entries(actions).forEach(([name, fn]) => {
+    if (name === 'values') { return; }
+    result[name] = fn;
+  });
+
+  return result;
 }
 
 export function autoMapStateToProps (state: any, path: string, names: string[]) {

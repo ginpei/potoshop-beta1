@@ -39,13 +39,15 @@ export function defaultState (preferences: Partial<IImageState>): IImageState {
   }, Object.assign({}, initialImageState));
 }
 
-const actions = Object.assign(autoActions([
-  'bordered',
-  'flipH',
-  'flipV',
-  'rotation',
-  'type',
-]), {
+const actions = autoActions({
+  values: [
+    'bordered',
+    'flipH',
+    'flipV',
+    'rotation',
+    'type',
+  ],
+
   SET_IMAGE: (state: IImageState, action: IAction) => {
     const image: HTMLImageElement | null = action.value;
     const width = image ? image.naturalWidth : 0;
