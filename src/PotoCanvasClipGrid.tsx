@@ -23,17 +23,26 @@ class PotoCanvasClipGrid extends React.Component<IPotoCanvasClipGridProps> {
     return (
       <div className="PotoCanvasClipGrid" style={this.props.style}>
         <svg className="PotoCanvasClipGrid-viewfinder" style={viewfinderStyle}>
-          <path className="PotoCanvasClipGrid-grid" d={this.gridPath} data-PotoCanvasClipGrid-shadow="true"/>
+          <path className="PotoCanvasClipGrid-grid"
+            d={this.gridPath}
+            data-PotoCanvasClipGrid-shadow="true"
+            />
           <path className="PotoCanvasClipGrid-grid" d={this.gridPath}/>
-          <path className="PotoCanvasClipGrid-angles" d={this.viewfinderAngles} />
+          <path className="PotoCanvasClipGrid-angles"
+            d={this.viewfinderAngles}
+            />
         </svg>
         <svg className="PotoCanvasClipGrid-handle"
           style={handleStyle}
           data-PotoCanvasClipGrid-shadow="true">
-          <path className="PotoCanvasClipGrid-handleImage" d={this.handleImagePath} />
+          <path className="PotoCanvasClipGrid-handleImage"
+            d={this.handleImagePath}
+            />
         </svg>
         <svg className="PotoCanvasClipGrid-handle" style={handleStyle}>
-          <path className="PotoCanvasClipGrid-handleImage" d={this.handleImagePath} />
+          <path className="PotoCanvasClipGrid-handleImage"
+            d={this.handleImagePath}
+            />
         </svg>
       </div>
     );
