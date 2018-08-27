@@ -16,7 +16,7 @@
     position: absolute;
     stroke: #333;
   }
-  [data-PotoCanvasClipGrid-shadow="true"] {
+  [data-potocanvasclipgrid-shadow="true"] {
     stroke: #ccc;
     transform: translate(1px, 1px);
   }
