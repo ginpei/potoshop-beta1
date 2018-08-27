@@ -244,8 +244,8 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
 }
 
 export async function setImageFile (file: File | null) {
-  store.dispatch({ type: 'SET_TYPE', value: file ? file.type : '' });
+  store.dispatch({ type: 'image/SET_TYPE', value: file ? file.type : '' });
 
   const image = await readImage(file);
-  store.dispatch({ type: 'SET_IMAGE', value: image });
+  store.dispatch({ type: 'image/SET_IMAGE', value: image });
 }

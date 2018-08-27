@@ -39,7 +39,7 @@ export function defaultState (preferences: Partial<IImageState>): IImageState {
   }, Object.assign({}, initialImageState));
 }
 
-const actions = autoActions({
+const actions = autoActions('image', {
   values: [
     'bordered',
     'flipH',

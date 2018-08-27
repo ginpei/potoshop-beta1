@@ -2,10 +2,10 @@ function camelToSnake (name: string): string {
   return name.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
 }
 
-export function autoActions (actions: any) {
+export function autoActions (prefix: string, actions: any) {
   const names: string[] = actions.values || [];
   const result = names.reduce((obj: any, name: string) => {
-    const actionName = `SET_${camelToSnake(name).toUpperCase()}`;
+    const actionName = `${prefix}/SET_${camelToSnake(name).toUpperCase()}`;
     obj[actionName] = (state: any, action: any) => {
       state[name] = action.value;
     };
@@ -14,7 +14,7 @@ export function autoActions (actions: any) {
 
   Object.entries(actions).forEach(([name, fn]) => {
     if (name === 'values') { return; }
-    result[name] = fn;
+    result[`${prefix}/${name}`] = fn;
   });
 
   return result;
