@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { IDraggableEventData } from './components/Draggable';
 import './PotoCanvas.css';
 import PotoCanvasClipper from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
@@ -9,7 +10,23 @@ import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasProps = Partial<IImageState>;
 
-class PotoCanvas extends React.Component<IPotoCanvasProps> {
+interface IPotoCanvasState {
+  clipDragging: boolean;
+  clipLeft: number;
+  clipTop: number;
+}
+
+class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
+  constructor (props: IPotoCanvasProps) {
+    super(props);
+    this.state = {
+      clipDragging: false,
+      clipLeft: 0,
+      clipTop: 0,
+    };
+    this.onClipDrag = this.onClipDrag.bind(this);
+  }
+
   public render () {
     const fileOpener = this.props.image ? undefined : (
       <div className="PotoCanvas">
@@ -30,12 +47,13 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
           active={true}
           clipRect={{
             height: 300,
-            left: 10,
-            top: 10,
+            left: 10 + this.state.clipLeft,
+            top: 10 + this.state.clipTop,
             width: 400,
           }}
           width={this.props.width || 0}
           height={this.props.height || 0}
+          onDrag={this.onClipDrag}
           />
       </div>
     );
@@ -52,6 +70,14 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       return;
     }
     setImageFile(files[0]);
+  }
+
+  protected onClipDrag (_: MouseEvent, data: IDraggableEventData) {
+    this.setState({
+      clipDragging: data.dragging,
+      clipLeft: data.diffLeft,
+      clipTop: data.diffTop,
+    });
   }
 }
 

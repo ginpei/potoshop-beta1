@@ -1,10 +1,12 @@
 import * as React from 'react';
+import Draggable from './components/Draggable';
 import './PotoCanvasClipGrid.css';
 
 interface IPotoCanvasClipGridProps {
   height: number;
   style: any;
   width: number;
+  onDrag?: (event: MouseEvent, data: unknown) => void;
 }
 
 class PotoCanvasClipGrid extends React.Component<IPotoCanvasClipGridProps> {
@@ -32,18 +34,20 @@ class PotoCanvasClipGrid extends React.Component<IPotoCanvasClipGridProps> {
             d={this.viewfinderAngles}
             />
         </svg>
-        <svg className="PotoCanvasClipGrid-handle"
-          style={handleStyle}
-          data-potocanvasclipgrid-shadow="true">
-          <path className="PotoCanvasClipGrid-handleImage"
-            d={this.handleImagePath}
-            />
-        </svg>
-        <svg className="PotoCanvasClipGrid-handle" style={handleStyle}>
-          <path className="PotoCanvasClipGrid-handleImage"
-            d={this.handleImagePath}
-            />
-        </svg>
+        <Draggable onDrag={this.props.onDrag}>
+          <svg className="PotoCanvasClipGrid-handle"
+            style={handleStyle}
+            data-potocanvasclipgrid-shadow="true">
+            <path className="PotoCanvasClipGrid-handleImage"
+              d={this.handleImagePath}
+              />
+          </svg>
+          <svg className="PotoCanvasClipGrid-handle" style={handleStyle}>
+            <path className="PotoCanvasClipGrid-handleImage"
+              d={this.handleImagePath}
+              />
+          </svg>
+        </Draggable>
       </div>
     );
   }
