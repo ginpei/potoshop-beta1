@@ -13,7 +13,6 @@ interface IPotoCanvasClipperProps {
   clipRect: IClipRect;
   height: number;
   width: number;
-  onDrag?: (event: MouseEvent, data: unknown) => void;
 }
 
 class PotoCanvasClipper extends React.Component<IPotoCanvasClipperProps> {
@@ -62,7 +61,6 @@ class PotoCanvasClipper extends React.Component<IPotoCanvasClipperProps> {
           height={clipRect.height}
           style={clipRect}
           width={clipRect.width}
-          onDrag={this.props.onDrag}
           />
       </div>
     );

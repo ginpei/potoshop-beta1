@@ -10,6 +10,7 @@ export interface IDraggableEventData {
 }
 
 interface IDraggableProps {
+  matcher?: string;
   onDrag?: (event: MouseEvent, data: IDraggableEventData) => void;
 }
 
@@ -54,6 +55,11 @@ class Draggable extends React.Component<IDraggableProps, IDraggableState> {
 
   protected onMouseDown (event: React.MouseEvent) {
     event.preventDefault();
+
+    if (!this.isMatchedElement(event)) {
+      return;
+    }
+
     this.setState({
       dragging: true,
       originLeft: event.pageX,
@@ -80,6 +86,29 @@ class Draggable extends React.Component<IDraggableProps, IDraggableState> {
       dragging: false,
     });
     this.emitDrag(event);
+  }
+
+  protected isMatchedElement (event: React.MouseEvent): boolean {
+    if (!this.props.matcher) {
+      return true;
+    }
+    const { target, currentTarget } = event;
+    if (!(target instanceof Element)) {
+      throw new Error('Event must happen on an element');
+    }
+
+    let matched: Element | null = null;
+    for (let el: Element | null = target; el; el = el.parentElement) {
+      if (el.matches(this.props.matcher)) {
+        matched = el;
+        break;
+      }
+      if (el === currentTarget) {
+        break;
+      }
+    }
+
+    return Boolean(matched);
   }
 
   protected emitDrag (event: MouseEvent) {

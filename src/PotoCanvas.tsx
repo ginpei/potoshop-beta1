@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IDraggableEventData } from './components/Draggable';
+import Draggable from './components/Draggable';
 import './PotoCanvas.css';
 import PotoCanvasClipper from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
@@ -43,18 +44,19 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
       <div className="PotoCanvas">
         {fileOpener}
         <PotoCanvasImage {...this.props} />
-        <PotoCanvasClipper
-          active={true}
-          clipRect={{
-            height: 300,
-            left: 10 + this.state.clipLeft,
-            top: 10 + this.state.clipTop,
-            width: 400,
-          }}
-          width={this.props.width || 0}
-          height={this.props.height || 0}
-          onDrag={this.onClipDrag}
-          />
+        <Draggable matcher=".js-clipDragHandle" onDrag={this.onClipDrag}>
+          <PotoCanvasClipper
+            active={true}
+            clipRect={{
+              height: 300,
+              left: 10 + this.state.clipLeft,
+              top: 10 + this.state.clipTop,
+              width: 400,
+            }}
+            width={this.props.width || 0}
+            height={this.props.height || 0}
+            />
+        </Draggable>
       </div>
     );
   }
