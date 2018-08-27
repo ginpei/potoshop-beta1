@@ -9,19 +9,3 @@
     background-color: var(--shadow-color);
     position: absolute;
   }
-  .PotoCanvasClipper-viewfinder {
-    position: absolute;
-  }
-  path.PotoCanvasClipper-angles {
-    fill: #333;
-    stroke: #ccc;
-  }
-  .PotoCanvasClipper-handle {
-    cursor: move;
-    position: absolute;
-    stroke: #333;
-  }
-  .PotoCanvasClipper-handle[data-handle-shadow="true"] {
-    stroke: #ccc;
-    transform: translate(1px, 1px);
-  }
