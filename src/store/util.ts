@@ -46,3 +46,11 @@ export function buildReducer (initialState: any, actions: any) {
     }
   };
 }
+
+export function buildNestedDispatcher (prefix: string, dispatchOriginal: any) {
+  const dispatch = (action: any) => {
+    action.type = `${prefix}/${action.type}`;
+    return dispatchOriginal(action);
+  };
+  return dispatch;
+}

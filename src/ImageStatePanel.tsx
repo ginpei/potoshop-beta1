@@ -5,7 +5,7 @@ import './ImageStatePanel.css';
 import './ManagementPanel.css';
 import { IImageState } from './store/image';
 import store from './store/index';
-import { autoMapStateToProps } from './store/util';
+import { autoMapStateToProps, buildNestedDispatcher } from './store/util';
 
 type IImageStatePanelProps = any;
 // interface IImageStatePanelProps {
@@ -160,7 +160,8 @@ function mapStateToProps (state: IImageState) {
   ]);
 }
 
-function mapDispatchToProps (dispatch: any) {
+function mapDispatchToProps (dispatchOriginal: any) {
+  const dispatch = buildNestedDispatcher('image', dispatchOriginal);
   return {
     setBordered: (value: boolean) => {
       dispatch({ type: 'SET_BORDERED', value });
