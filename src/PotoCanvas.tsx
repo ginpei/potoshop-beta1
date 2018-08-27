@@ -27,12 +27,12 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
         {fileOpener}
         <PotoCanvasImage {...this.props} />
         <PotoCanvasClipper
-          active={false}
+          active={true}
           clipRect={{
-            height: 20,
+            height: 300,
             left: 10,
             top: 10,
-            width: 20,
+            width: 400,
           }}
           width={this.props.width || 0}
           height={this.props.height || 0}
