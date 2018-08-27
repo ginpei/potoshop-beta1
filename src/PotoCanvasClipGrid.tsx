@@ -23,9 +23,13 @@ class PotoCanvasClipGrid extends React.Component<IPotoCanvasClipGridProps> {
     return (
       <div className="PotoCanvasClipGrid" style={this.props.style}>
         <svg className="PotoCanvasClipGrid-viewfinder" style={viewfinderStyle}>
+          <path className="PotoCanvasClipGrid-grid" d={this.gridPath} data-PotoCanvasClipGrid-shadow="true"/>
+          <path className="PotoCanvasClipGrid-grid" d={this.gridPath}/>
           <path className="PotoCanvasClipGrid-angles" d={this.viewfinderAngles} />
         </svg>
-        <svg className="PotoCanvasClipGrid-handle" style={handleStyle} data-handle-shadow="true">
+        <svg className="PotoCanvasClipGrid-handle"
+          style={handleStyle}
+          data-PotoCanvasClipGrid-shadow="true">
           <path className="PotoCanvasClipGrid-handleImage" d={this.handleImagePath} />
         </svg>
         <svg className="PotoCanvasClipGrid-handle" style={handleStyle}>
@@ -33,6 +37,18 @@ class PotoCanvasClipGrid extends React.Component<IPotoCanvasClipGridProps> {
         </svg>
       </div>
     );
+  }
+
+  protected get gridPath (): string {
+    const goldenRatio = 1.6180339887498948420;
+    const { height, width } = this.props;
+
+    return `
+      M 0,${height / goldenRatio} l ${width},0
+      M 0,${height - height / goldenRatio} l ${width},0
+      M ${width / goldenRatio},0 l 0,${height}
+      M ${width - width / goldenRatio},0 l 0,${height}
+    `;
   }
 
   protected get viewfinderAngles (): string {

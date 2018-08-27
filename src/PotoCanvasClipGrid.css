@@ -4,6 +4,9 @@
   .PotoCanvasClipGrid-viewfinder {
     position: absolute;
   }
+  .PotoCanvasClipGrid-grid {
+    stroke: #333;
+  }
   path.PotoCanvasClipGrid-angles {
     fill: #333;
     stroke: #ccc;
@@ -13,7 +16,7 @@
     position: absolute;
     stroke: #333;
   }
-  .PotoCanvasClipGrid-handle[data-handle-shadow="true"] {
+  [data-PotoCanvasClipGrid-shadow="true"] {
     stroke: #ccc;
     transform: translate(1px, 1px);
   }
