@@ -11,6 +11,23 @@
     "no-console": false,
     "semicolon": [true, "always"],
     "space-before-function-paren": [true, "always"],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "onespace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
     "quotemark": [true, "single", "jsx-double"]
   }
 }
