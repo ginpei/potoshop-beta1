@@ -1,4 +1,4 @@
-import { combineReducers, createStore } from "redux";
+import { combineReducers, createStore } from 'redux';
 import image from './image';
 
 const rootReducer = combineReducers({
