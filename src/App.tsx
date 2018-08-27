@@ -6,7 +6,7 @@ import AppHeader from './AppHeader';
 import ManagementPanel from './ManagementPanel';
 import PotoCanvas from './PotoCanvas';
 import { setImageFile } from './services/image';
-import imageState from './store/imageState';
+import store from './store/index';
 import Toolbar from './Toolbar';
 
 interface IAppState {
@@ -29,7 +29,7 @@ class App extends React.Component<{}, IAppState> {
 
   public render () {
     return (
-      <Provider store={imageState}>
+      <Provider store={store}>
         <div className="App"
           data-drag-over={this.state.dragover}
           >
@@ -70,7 +70,7 @@ class App extends React.Component<{}, IAppState> {
   protected async onPaste (event: ClipboardEvent) {
     const item = event.clipboardData.items[0];
     if (item) {
-      imageState.dispatch({ type: 'SET_TYPE', value: item.type });
+      store.dispatch({ type: 'SET_TYPE', value: item.type });
     }
     if (!item || !item.type.startsWith('image')) {
       return;

@@ -1,4 +1,3 @@
-import { createStore } from 'redux';
 import { autoActions, buildReducer } from './util';
 
 type IAction = any;
@@ -71,7 +70,4 @@ const actions = Object.assign(autoActions([
     state.height = Math.floor(state.originalHeight * scale);
   },
 });
-const reducer = buildReducer(initialImageState, actions);
-const store = createStore(reducer);
-
-export default store;
+export default buildReducer(initialImageState, actions);

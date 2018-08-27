@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 // import { setImageFile } from './services/image';
-import { IImageState } from './store/imageState';
+import { IImageState } from './store/image';
 import { autoMapStateToProps } from './store/util';
 import './Toolbar.css';
 
@@ -39,7 +39,7 @@ class Toolbar extends React.Component<IToolbarProps, IToolbarState> {
 }
 
 function mapStateToProps (state: IImageState) {
-  return autoMapStateToProps(state, [
+  return autoMapStateToProps(state, 'image', [
     'image',
   ]);
 }

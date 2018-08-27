@@ -6,7 +6,7 @@ import './PotoCanvas.css';
 import PotoCanvasClipper from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
-import { IImageState } from './store/imageState';
+import { IImageState } from './store/image';
 import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasProps = Partial<IImageState>;
@@ -84,7 +84,7 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
 }
 
 function mapStateToProps (state: IImageState) {
-  return autoMapStateToProps(state, [
+  return autoMapStateToProps(state, 'image', [
     'height',
     'image',
     'width',

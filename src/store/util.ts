@@ -12,9 +12,10 @@ export function autoActions (names: string[]) {
   }, {});
 }
 
-export function autoMapStateToProps (state: any, names: string[]) {
+export function autoMapStateToProps (state: any, path: string, names: string[]) {
   return names.reduce((obj, name) => {
-    obj[name] = state[name];
+    // nested path like "foo/bar" is not supported yet
+    obj[name] = state[path][name];
     return obj;
   }, {});
 }

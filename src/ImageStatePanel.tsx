@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Slider, { ISliderEventData } from './components/Slider';
 import './ImageStatePanel.css';
 import './ManagementPanel.css';
-import imageState, { IImageState } from './store/imageState';
+import { IImageState } from './store/image';
+import store from './store/index';
 import { autoMapStateToProps } from './store/util';
 
 type IImageStatePanelProps = any;
@@ -16,7 +17,7 @@ type IImageStatePanelState = IImageState;
 class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageStatePanelState> {
   constructor (props: IImageStatePanelProps) {
     super(props);
-    this.state = imageState.getState();
+    this.state = store.getState().image;
 
     this.onSlider1Change = this.onSlider1Change.bind(this);
     this.onRotationChange = this.onRotationChange.bind(this);
@@ -145,7 +146,7 @@ class ImageStatePanel extends React.Component<IImageStatePanelProps, IImageState
 }
 
 function mapStateToProps (state: IImageState) {
-  return autoMapStateToProps(state, [
+  return autoMapStateToProps(state, 'image', [
     'bordered',
     'flipH',
     'flipV',

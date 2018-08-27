@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import './PotoCanvasImage.css';
-import { defaultState, IImageState } from './store/imageState';
+import { defaultState, IImageState } from './store/image';
 import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasImageProps = Partial<IImageState>;
@@ -71,7 +71,7 @@ class PotoCanvasImage extends React.Component<IPotoCanvasImageProps> {
 }
 
 function mapStateToProps (state: IImageState) {
-  return autoMapStateToProps(state, [
+  return autoMapStateToProps(state, 'image', [
     'bordered',
     'flipH',
     'flipV',

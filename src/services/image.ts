@@ -1,4 +1,4 @@
-import imageState from '../store/imageState';
+import store from '../store/index';
 
 export function isImageFile (file: File | null): boolean {
   return Boolean(file && file.type.startsWith('image/'));
@@ -244,8 +244,8 @@ function applyImageOrientation (image: HTMLImageElement, orientation: ExifOrient
 }
 
 export async function setImageFile (file: File | null) {
-  imageState.dispatch({ type: 'SET_TYPE', value: file ? file.type : '' });
+  store.dispatch({ type: 'SET_TYPE', value: file ? file.type : '' });
 
   const image = await readImage(file);
-  imageState.dispatch({ type: 'SET_IMAGE', value: image });
+  store.dispatch({ type: 'SET_IMAGE', value: image });
 }
