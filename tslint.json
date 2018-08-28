@@ -8,9 +8,14 @@
     ]
   },
   "rules": {
+    "eofline": true,
+    "indent": [true, "spaces", 2],
+    "linebreak-style": [true, "LF"],
     "no-console": false,
+    "no-trailing-whitespace": true,
     "semicolon": [true, "always"],
     "space-before-function-paren": [true, "always"],
+    "space-within-parens": true,
     "typedef-whitespace": [
       true,
       {
@@ -28,6 +33,17 @@
         "variable-declaration": "onespace"
       }
     ],
-    "quotemark": [true, "single", "jsx-double"]
+    "quotemark": [true, "single", "jsx-double"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type-operator",
+      "check-preblock"
+    ]
   }
 }
