@@ -12,6 +12,8 @@ import { autoMapStateToProps } from './store/util';
 type IPotoCanvasProps = Partial<IImageState>;
 
 interface IPotoCanvasState {
+  clipDiffLeft: number;
+  clipDiffTop: number;
   clipDragging: boolean;
   clipLeft: number;
   clipTop: number;
@@ -21,6 +23,8 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
   constructor (props: IPotoCanvasProps) {
     super(props);
     this.state = {
+      clipDiffLeft: 0,
+      clipDiffTop: 0,
       clipDragging: false,
       clipLeft: 0,
       clipTop: 0,
@@ -49,8 +53,8 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
             active={true}
             clipRect={{
               height: 300,
-              left: 10 + this.state.clipLeft,
-              top: 10 + this.state.clipTop,
+              left: this.state.clipLeft + this.state.clipDiffLeft,
+              top: this.state.clipTop + this.state.clipDiffTop,
               width: 400,
             }}
             width={this.props.width || 0}
@@ -75,11 +79,23 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
   }
 
   protected onClipDrag (_: MouseEvent, data: IDraggableEventData) {
-    this.setState({
-      clipDragging: data.dragging,
-      clipLeft: data.diffLeft,
-      clipTop: data.diffTop,
-    });
+    if (data.dragging) {
+      this.setState({
+        clipDiffLeft: data.diffLeft,
+        clipDiffTop: data.diffTop,
+        clipDragging: true,
+      });
+    }
+    else {
+      const s = this.state;
+      this.setState({
+        clipDiffLeft: 0,
+        clipDiffTop: 0,
+        clipDragging: false,
+        clipLeft: s.clipLeft + data.diffLeft,
+        clipTop: s.clipTop + data.diffTop,
+      });
+    }
   }
 }
 
