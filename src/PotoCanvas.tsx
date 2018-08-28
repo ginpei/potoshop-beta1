@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IDraggableEventData } from './components/Draggable';
 import Draggable from './components/Draggable';
 import './PotoCanvas.css';
-import PotoCanvasClipper from './PotoCanvasClipper';
+import PotoCanvasClipper, { IClipRect } from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
 import { IImageState } from './store/image';
@@ -15,19 +15,36 @@ interface IPotoCanvasState {
   clipDiffLeft: number;
   clipDiffTop: number;
   clipDragging: boolean;
+  clipHeight: number;
   clipLeft: number;
   clipTop: number;
+  clipWidth: number;
 }
 
 class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
+  protected get clipRect (): IClipRect {
+    const left = this.state.clipLeft + this.state.clipDiffLeft;
+    const top = this.state.clipTop + this.state.clipDiffTop;
+    const height = this.state.clipHeight / 2;
+    const width = this.state.clipWidth / 2;
+    return {
+      height,
+      left: Math.min(Math.max(left, 0), (this.props.width || 0) - width),
+      top: Math.min(Math.max(top, 0), (this.props.height || 0) - height),
+      width,
+    };
+  }
+
   constructor (props: IPotoCanvasProps) {
     super(props);
     this.state = {
       clipDiffLeft: 0,
       clipDiffTop: 0,
       clipDragging: false,
+      clipHeight: 0,
       clipLeft: 0,
       clipTop: 0,
+      clipWidth: 0,
     };
     this.onClipDrag = this.onClipDrag.bind(this);
   }
@@ -50,19 +67,23 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
         <PotoCanvasImage {...this.props} />
         <Draggable matcher=".js-clipDragHandle" onDrag={this.onClipDrag}>
           <PotoCanvasClipper
-            active={true}
-            clipRect={{
-              height: 300,
-              left: this.state.clipLeft + this.state.clipDiffLeft,
-              top: this.state.clipTop + this.state.clipDiffTop,
-              width: 400,
-            }}
+            active={Boolean(this.props.image)}
+            clipRect={this.clipRect}
             width={this.props.width || 0}
             height={this.props.height || 0}
             />
         </Draggable>
       </div>
     );
+  }
+
+  public componentWillReceiveProps (nextProps: IPotoCanvasProps) {
+    if (this.props.image !== nextProps.image) {
+      this.setState({
+        clipHeight: nextProps.height || 0,
+        clipWidth: nextProps.width || 0,
+      });
+    }
   }
 
   protected async onFileChange (event: React.ChangeEvent<HTMLInputElement>) {

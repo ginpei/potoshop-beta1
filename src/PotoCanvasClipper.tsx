@@ -2,7 +2,7 @@ import * as React from 'react';
 import PotoCanvasClipGrid from './PotoCanvasClipGrid';
 import './PotoCanvasClipper.css';
 
-interface IClipRect {
+export interface IClipRect {
   height: number;
   left: number;
   top: number;
