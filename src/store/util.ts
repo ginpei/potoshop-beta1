@@ -37,12 +37,8 @@ export function buildReducer (initialState: any, actions: any) {
       const rv = Object.assign({}, state);
       actions[type](rv, action);
       return rv;
-    }
-    else if (type.startsWith('@@redux/')) {
+    } else {
       return state;
-    }
-    else {
-      throw new Error(`Unknown action type: ${type}`);
     }
   };
 }
