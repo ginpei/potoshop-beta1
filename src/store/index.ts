@@ -1,6 +1,11 @@
 import { combineReducers, createStore } from 'redux';
-import image from './image';
-import imageClip from './imageClip';
+import image, { IImageState } from './image';
+import imageClip, { IImageClipState } from './imageClip';
+
+export interface IStore {
+  image: IImageState;
+  imageClip: IImageClipState;
+}
 
 const rootReducer = combineReducers({
   image,

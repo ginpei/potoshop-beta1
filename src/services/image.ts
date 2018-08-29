@@ -248,4 +248,8 @@ export async function setImageFile (file: File | null) {
 
   const image = await readImage(file);
   store.dispatch({ type: 'image/SET_IMAGE', value: image });
+  store.dispatch({ type: 'imageClip/CLEAR', value: {
+    height: store.getState().image.height,
+    width: store.getState().image.width,
+  }});
 }

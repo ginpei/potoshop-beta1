@@ -6,27 +6,28 @@ import './PotoCanvas.css';
 import PotoCanvasClipper, { IClipRect } from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
-import { IImageState } from './store/image';
+import store, { IStore } from './store';
+import { IImageClipState } from './store/imageClip';
 import { autoMapStateToProps } from './store/util';
 
-type IPotoCanvasProps = Partial<IImageState>;
-
-interface IPotoCanvasState {
-  clipDiffLeft: number;
-  clipDiffTop: number;
-  clipDragging: boolean;
-  clipHeight: number;
-  clipLeft: number;
-  clipTop: number;
-  clipWidth: number;
+interface IPotoCanvasProps {
+  height?: number;
+  image?: HTMLImageElement | null;
+  imageClip?: IImageClipState;
+  width?: number;
 }
 
-class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
+class PotoCanvas extends React.Component<IPotoCanvasProps> {
   protected get clipRect (): IClipRect {
-    const left = this.state.clipLeft + this.state.clipDiffLeft;
-    const top = this.state.clipTop + this.state.clipDiffTop;
-    const height = this.state.clipHeight / 2;
-    const width = this.state.clipWidth / 2;
+    const c = this.props.imageClip;
+    if (!c) {
+      return { height: 0, left: 0, top: 0, width: 0 };
+    }
+
+    const left = c.left + c.diffLeft;
+    const top = c.top + c.diffTop;
+    const height = c.height;
+    const width = c.width;
     return {
       height,
       left: Math.min(Math.max(left, 0), (this.props.width || 0) - width),
@@ -101,31 +102,23 @@ class PotoCanvas extends React.Component<IPotoCanvasProps, IPotoCanvasState> {
 
   protected onClipDrag (_: MouseEvent, data: IDraggableEventData) {
     if (data.dragging) {
-      this.setState({
-        clipDiffLeft: data.diffLeft,
-        clipDiffTop: data.diffTop,
-        clipDragging: true,
-      });
+      store.dispatch({ type: 'imageClip/DRAG', values: data });
     }
     else {
-      const s = this.state;
-      this.setState({
-        clipDiffLeft: 0,
-        clipDiffTop: 0,
-        clipDragging: false,
-        clipLeft: s.clipLeft + data.diffLeft,
-        clipTop: s.clipTop + data.diffTop,
-      });
+      store.dispatch({ type: 'imageClip/END_DRAGGING', values: data });
     }
   }
 }
 
-function mapStateToProps (state: IImageState) {
-  return autoMapStateToProps(state, 'image', [
-    'height',
-    'image',
-    'width',
-  ]);
+function mapStateToProps (state: IStore) {
+  return {
+    imageClip: state.imageClip,
+    ...autoMapStateToProps(state, 'image', [
+      'height',
+      'image',
+      'width',
+    ])
+  };
 }
 
 export default connect(mapStateToProps)(PotoCanvas);
