@@ -13,6 +13,16 @@ export interface IImageClipState {
 }
 type IAction = any;
 
+export interface IDraggingAction {
+  type: 'imageClip/DRAG' | 'imageClip/END_DRAGGING';
+  values: {
+    diffLeft: number;
+    diffTop: number;
+    imageHeight: number;
+    imageWidth: number;
+  };
+}
+
 const initialImageState: IImageClipState = {
   diffHeight: 0,
   diffLeft: 0,
@@ -46,32 +56,32 @@ const actions = autoActions('imageClip', {
     state.width = action.value.width / 2;
   },
 
-  DRAG: (state: IImageClipState, action: IAction) => {
-    const v = action.values;
-    state.diffLeft = calculatePossibleLeft(state, v) - state.left;
-    state.diffTop = calculatePossibleTop(state, v) - state.top;
+  DRAG: (state: IImageClipState, action: IDraggingAction) => {
+    state.diffLeft = calculatePossibleLeft(state, action) - state.left;
+    state.diffTop = calculatePossibleTop(state, action) - state.top;
     state.dragging = true;
   },
 
-  END_DRAGGING: (state: IImageClipState, action: IAction) => {
-    const v = action.values;
+  END_DRAGGING: (state: IImageClipState, action: IDraggingAction) => {
     state.diffLeft = 0;
     state.diffTop = 0;
     state.dragging = false;
-    state.left = calculatePossibleLeft(state, v);
-    state.top = calculatePossibleTop(state, v);
+    state.left = calculatePossibleLeft(state, action);
+    state.top = calculatePossibleTop(state, action);
   },
 });
 export default buildReducer(initialImageState, actions);
 
-function calculatePossibleLeft (state: IImageClipState, v: any): number {
+function calculatePossibleLeft (state: IImageClipState, action: IDraggingAction): number {
+  const v = action.values;
   const max = v.imageWidth - state.width;
   const min = 0;
   const value = state.left + v.diffLeft;
   return Math.min(Math.max(min, value), max);
 }
 
-function calculatePossibleTop (state: IImageClipState, v: any): number {
+function calculatePossibleTop (state: IImageClipState, action: IDraggingAction): number {
+  const v = action.values;
   const max = v.imageHeight - state.height;
   const min = 0;
   const value = state.top + v.diffTop;

@@ -7,7 +7,7 @@ import PotoCanvasClipper, { IClipRect } from './PotoCanvasClipper';
 import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
 import store, { IStore } from './store';
-import { IImageClipState } from './store/imageClip';
+import { IDraggingAction, IImageClipState } from './store/imageClip';
 import { autoMapStateToProps } from './store/util';
 
 interface IPotoCanvasProps {
@@ -103,10 +103,10 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       imageWidth: this.props.width || 0,
     };
     if (data.dragging) {
-      store.dispatch({ type: 'imageClip/DRAG', values });
+      store.dispatch({ type: 'imageClip/DRAG', values } as IDraggingAction);
     }
     else {
-      store.dispatch({ type: 'imageClip/END_DRAGGING', values });
+      store.dispatch({ type: 'imageClip/END_DRAGGING', values } as IDraggingAction);
     }
   }
 }
