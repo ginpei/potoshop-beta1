@@ -48,8 +48,8 @@ const actions = autoActions('imageClip', {
 
   DRAG: (state: IImageClipState, action: IAction) => {
     const v = action.values;
-    state.diffLeft = v.diffLeft;
-    state.diffTop = v.diffTop;
+    state.diffLeft = calculatePossibleLeft(state, v) - state.left;
+    state.diffTop = calculatePossibleTop(state, v) - state.top;
     state.dragging = true;
   },
 
@@ -58,8 +58,22 @@ const actions = autoActions('imageClip', {
     state.diffLeft = 0;
     state.diffTop = 0;
     state.dragging = false;
-    state.left += v.diffLeft;
-    state.top += v.diffTop;
+    state.left = calculatePossibleLeft(state, v);
+    state.top = calculatePossibleTop(state, v);
   },
 });
 export default buildReducer(initialImageState, actions);
+
+function calculatePossibleLeft (state: IImageClipState, v: any): number {
+  const max = v.imageWidth - state.width;
+  const min = 0;
+  const value = state.left + v.diffLeft;
+  return Math.min(Math.max(min, value), max);
+}
+
+function calculatePossibleTop (state: IImageClipState, v: any): number {
+  const max = v.imageHeight - state.height;
+  const min = 0;
+  const value = state.top + v.diffTop;
+  return Math.min(Math.max(min, value), max);
+}

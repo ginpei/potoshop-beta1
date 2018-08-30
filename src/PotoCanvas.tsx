@@ -24,15 +24,11 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
       return { height: 0, left: 0, top: 0, width: 0 };
     }
 
-    const left = c.left + c.diffLeft;
-    const top = c.top + c.diffTop;
-    const height = c.height;
-    const width = c.width;
     return {
-      height,
-      left: Math.min(Math.max(left, 0), (this.props.width || 0) - width),
-      top: Math.min(Math.max(top, 0), (this.props.height || 0) - height),
-      width,
+      height: c.height,
+      left: c.left + c.diffLeft,
+      top: c.top + c.diffTop,
+      width: c.width,
     };
   }
 
@@ -101,11 +97,16 @@ class PotoCanvas extends React.Component<IPotoCanvasProps> {
   }
 
   protected onClipDrag (_: MouseEvent, data: IDraggableEventData) {
+    const values = {
+      ...data,
+      imageHeight: this.props.height || 0,
+      imageWidth: this.props.width || 0,
+    };
     if (data.dragging) {
-      store.dispatch({ type: 'imageClip/DRAG', values: data });
+      store.dispatch({ type: 'imageClip/DRAG', values });
     }
     else {
-      store.dispatch({ type: 'imageClip/END_DRAGGING', values: data });
+      store.dispatch({ type: 'imageClip/END_DRAGGING', values });
     }
   }
 }
