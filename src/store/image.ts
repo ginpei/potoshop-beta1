@@ -62,7 +62,6 @@ const actions = autoActions('image', {
     state.scale = 1;
     state.flipH = false;
     state.flipV = false;
-    console.log(state, width, height);
   },
 
   SET_SCALE: (state: IImageState, action: IAction) => {
