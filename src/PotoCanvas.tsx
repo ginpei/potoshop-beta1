@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IDraggableEventData } from './components/Draggable';
+import PotoCanvasClipper, { IClipRect } from './components/canvas/PotoCanvasClipper';
+import PotoCanvasImage from './components/canvas/PotoCanvasImage';
 import Draggable from './components/Draggable';
+import { IDraggableEventData } from './components/Draggable';
 import './PotoCanvas.css';
-import PotoCanvasClipper, { IClipRect } from './PotoCanvasClipper';
-import PotoCanvasImage from './PotoCanvasImage';
 import { setImageFile } from './services/image';
 import store, { IStore } from './store';
 import { IDraggingAction, IImageClipState } from './store/imageClip';

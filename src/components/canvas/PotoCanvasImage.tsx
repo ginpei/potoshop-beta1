@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { defaultState, IImageState } from '../../store/image';
+import { autoMapStateToProps } from '../../store/util';
 import './PotoCanvasImage.css';
-import { defaultState, IImageState } from './store/image';
-import { autoMapStateToProps } from './store/util';
 
 type IPotoCanvasImageProps = Partial<IImageState>;
 
