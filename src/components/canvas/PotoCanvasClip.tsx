@@ -1,6 +1,6 @@
 import * as React from 'react';
+import './PotoCanvasClip.css';
 import PotoCanvasClipGrid from './PotoCanvasClipGrid';
-import './PotoCanvasClipper.css';
 
 export interface IClipRect {
   height: number;
@@ -15,7 +15,7 @@ interface IPotoCanvasClipperProps {
   width: number;
 }
 
-class PotoCanvasClipper extends React.Component<IPotoCanvasClipperProps> {
+class PotoCanvasClip extends React.Component<IPotoCanvasClipperProps> {
   public render () {
     if (!this.props.active) {
       return null;
@@ -52,11 +52,11 @@ class PotoCanvasClipper extends React.Component<IPotoCanvasClipperProps> {
     };
 
     return (
-      <div className="PotoCanvasClipper" style={containerStyle}>
-        <div className="PotoCanvasClipper-shadow" style={topShadowStyle}/>
-        <div className="PotoCanvasClipper-shadow" style={leftShadowStyle}/>
-        <div className="PotoCanvasClipper-shadow" style={rightShadowStyle}/>
-        <div className="PotoCanvasClipper-shadow" style={bottomShadowStyle}/>
+      <div className="PotoCanvasClip" style={containerStyle}>
+        <div className="PotoCanvasClip-shadow" style={topShadowStyle}/>
+        <div className="PotoCanvasClip-shadow" style={leftShadowStyle}/>
+        <div className="PotoCanvasClip-shadow" style={rightShadowStyle}/>
+        <div className="PotoCanvasClip-shadow" style={bottomShadowStyle}/>
         <PotoCanvasClipGrid
           height={clipRect.height}
           style={clipRect}
@@ -67,4 +67,4 @@ class PotoCanvasClipper extends React.Component<IPotoCanvasClipperProps> {
   }
 }
 
-export default PotoCanvasClipper;
+export default PotoCanvasClip;

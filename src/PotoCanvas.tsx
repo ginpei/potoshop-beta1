@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import PotoCanvasClipper, { IClipRect } from './components/canvas/PotoCanvasClipper';
+import PotoCanvasClipper, { IClipRect } from './components/canvas/PotoCanvasClip';
 import PotoCanvasImage from './components/canvas/PotoCanvasImage';
 import Draggable from './components/Draggable';
 import { IDraggableEventData } from './components/Draggable';
