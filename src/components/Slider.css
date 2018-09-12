@@ -1,0 +1,19 @@
+.Slider {
+  display: inline-grid;
+  grid-gap: 5%;
+  grid-template:
+    "range number" auto
+    / auto 50px;
+}
+  .Slider > input {
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+  }
+
+  .Slider-range {
+    grid-area: range;
+  }
+  .Slider-number {
+    grid-area: number;
+  }

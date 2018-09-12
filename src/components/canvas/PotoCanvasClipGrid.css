@@ -1,0 +1,22 @@
+.PotoCanvasClipGrid {
+  position: relative;
+}
+  .PotoCanvasClipGrid-viewfinder {
+    position: absolute;
+  }
+  .PotoCanvasClipGrid-grid {
+    stroke: #333;
+  }
+  path.PotoCanvasClipGrid-angles {
+    fill: #333;
+    stroke: #ccc;
+  }
+  .PotoCanvasClipGrid-handle {
+    cursor: move;
+    position: absolute;
+    stroke: #333;
+  }
+  [data-potocanvasclipgrid-shadow="true"] {
+    stroke: #ccc;
+    transform: translate(1px, 1px);
+  }

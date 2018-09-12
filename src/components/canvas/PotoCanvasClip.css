@@ -1,0 +1,11 @@
+.PotoCanvasClip {
+  --shadow-color: #3339;
+
+  left: var(--app-space);
+  position: absolute;
+  top: var(--app-space);
+}
+  .PotoCanvasClip-shadow {
+    background-color: var(--shadow-color);
+    position: absolute;
+  }
